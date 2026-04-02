@@ -187,10 +187,13 @@ button:active {
     <button id="btnExcluded">Vyřazené</button>
   </div>
 
-  <label style="display:block; font-size:16px; margin-bottom:10px;">
-    <input type="checkbox" id="allKnowToggle">
-    Hráli všichni
-  </label>
+  <!-- ✅ WRAPPER -->
+  <div id="allKnowWrapper">
+    <label style="display:block; font-size:16px; margin-bottom:10px;">
+      <input type="checkbox" id="allKnowToggle">
+      Hráli všichni
+    </label>
+  </div>
 
   <ul id="validGames"></ul>
   <ul id="excludedGames" style="display:none;"></ul>
@@ -409,23 +412,19 @@ function update() {
 
   games.forEach(game => {
 
-    // 1. počet hráčů
     if (game.players !== count) return;
 
-    // 2. majitel
     if (!game.owners.some(o => letters.includes(o))) return;
 
     let banPlayers = [];
     let unknowingPlayers = [];
 
-    // 3. BAN
     for (let player of selected) {
       if (blacklist[player]?.includes(game.name)) {
         banPlayers.push(player);
       }
     }
 
-    // 4. NEUMÍ
     if (allKnow && game.knows) {
       for (let player of selected) {
         let code = playersMap[player];
@@ -441,7 +440,7 @@ function update() {
 
     const li = document.createElement("li");
 
-    // 🔴 BAN (nejvyšší priorita)
+    // 🔴 BAN
     if (hasBan) {
 
       let reasons = ["BAN: " + banPlayers.join(", ")];
@@ -462,9 +461,7 @@ function update() {
         </div>
       `;
 
-      li.querySelector(".game-header").addEventListener("click", (e) => {
-        e.stopPropagation();
-
+      li.querySelector(".game-header").addEventListener("click", () => {
         const reason = li.querySelector(".game-reason");
         const arrow = li.querySelector(".arrow");
 
@@ -478,7 +475,7 @@ function update() {
       return;
     }
 
-    // 🟡 NĚKDO NEHRÁL
+    // 🟡 NEHRÁL (jen ve valid)
     if (hasUnknown && allKnow) {
 
       li.classList.add("partial");
@@ -496,9 +493,7 @@ function update() {
         </div>
       `;
 
-      li.querySelector(".game-header").addEventListener("click", (e) => {
-        e.stopPropagation();
-
+      li.querySelector(".game-header").addEventListener("click", () => {
         const reason = li.querySelector(".game-reason");
         const arrow = li.querySelector(".arrow");
 
@@ -526,7 +521,6 @@ function update() {
 
   });
 }
-
 document.querySelectorAll("input").forEach(cb => {
   cb.addEventListener("change", update);
 });
@@ -545,10 +539,29 @@ function showExcluded() {
   btnValid.classList.remove("active");
 }
 
+function showValid() {
+  validGames.style.display = "block";
+  excludedGames.style.display = "none";
+
+  document.getElementById("allKnowWrapper").style.display = "block";
+
+  btnValid.classList.add("active");
+  btnExcluded.classList.remove("active");
+}
+
+function showExcluded() {
+  validGames.style.display = "none";
+  excludedGames.style.display = "block";
+
+  document.getElementById("allKnowWrapper").style.display = "none";
+
+  btnExcluded.classList.add("active");
+  btnValid.classList.remove("active");
+}
+
 btnValid.addEventListener("click", showValid);
 btnExcluded.addEventListener("click", showExcluded);
 
 update();
 showValid();
-
 </script>
