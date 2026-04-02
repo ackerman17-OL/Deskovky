@@ -18,11 +18,30 @@ body {
 }
 
 .card {
-  background: #1e1e1e;
-  border-radius: 20px;
-  padding: 15px;
-  margin: 15px auto;
+  background: linear-gradient(145deg, #1c1c1c, #141414);
+  border-radius: 16px;
+  padding: 18px;
+  margin: 16px auto;
   max-width: 600px;
+
+  /* jemný stín */
+  box-shadow: 
+    0 4px 10px rgba(0,0,0,0.5),
+    inset 0 1px 1px rgba(255,255,255,0.05);
+
+  /* jemná hranice */
+  border: 1px solid rgba(255,255,255,0.05);
+
+  /* plynulost */
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* hover efekt */
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 8px 20px rgba(0,0,0,0.6),
+    inset 0 1px 1px rgba(255,255,255,0.05);
 }
 
 .players {
@@ -34,6 +53,7 @@ body {
   display: block;
   margin: 8px 0;
 }
+
 @media (max-width: 600px) {
   body {
     font-size: clamp(28px, 6vw, 40px);
@@ -50,6 +70,7 @@ li {
   padding: 10px;
   border-radius: 12px;
   background: #2a2a2a;
+  text-align: left; /* 🔥 důležité */
 }
 
 .valid {
@@ -63,32 +84,38 @@ li {
   color: #ff6b6b;
 }
 
+/* checkbox */
 input[type="checkbox"] {
   transform: scale(1.6);
   margin-right: 10px;
 }
 
+/* 🔥 JEDNOTNÝ HEADER */
 .game-header {
   display: flex;
   align-items: center;
+  justify-content: flex-start; /* klíčové */
   gap: 10px;
+  width: 100%;
 }
 
+/* 🔥 ŠIPKA – musí mít stejný prostor */
 .arrow {
+  width: 20px;
+  min-width: 20px;
+  display: inline-block;
+  text-align: center;
   cursor: pointer;
   font-weight: bold;
 }
 
-.excluded .game-header {
-  justify-content: center;
-}
-
+/* tagy */
 .game-tags {
   display: flex;
   gap: 6px;
   flex-wrap: wrap;
   margin-top: 5px;
-  justify-content: center;
+  justify-content: flex-start; /* 🔥 změna z center */
 }
 
 .tag {
@@ -99,29 +126,28 @@ input[type="checkbox"] {
   font-size: 13px;
 }
 
-button.active {
-  font-weight: bold;
-}
-
+/* tlačítka */
 button {
   font-size: 16px;
-  padding: 8px 14px;
-  margin: 4px;
-  border-radius: 10px;
+  padding: 10px 16px;
+  margin: 5px;
+  border-radius: 12px;
   border: none;
   cursor: pointer;
-  background: #fff;
-  color: #000;
+
+  background: #2b2b2b;
+  color: #fff;
+
+  transition: all 0.2s ease;
 }
 
-button.active-valid {
-  background: #4CAF50;
-  color: #fff;
+button:hover {
+  background: #3a3a3a;
+  transform: translateY(-1px);
 }
 
-button.active-excluded {
-  background: #e53935;
-  color: #fff;
+button:active {
+  transform: scale(0.97);
 }
 
 #btnValid.active {
@@ -399,7 +425,7 @@ function update() {
       }
     }
 
-    // 4. NEUMÍ (jen když je zapnuto "všichni hráli")
+    // 4. NEUMÍ
     if (allKnow && game.knows) {
       for (let player of selected) {
         let code = playersMap[player];
@@ -415,18 +441,44 @@ function update() {
 
     const li = document.createElement("li");
 
-    // 🟢 VALID (žádný problém)
-    if (!hasBan && (!allKnow || !hasUnknown)) {
+    // 🔴 BAN (nejvyšší priorita)
+    if (hasBan) {
 
-      li.classList.add("valid");
+      let reasons = ["BAN: " + banPlayers.join(", ")];
+      if (hasUnknown) reasons.push("nehrál: " + unknowingPlayers.join(", "));
 
-      li.innerHTML = `<div class="game-header"><span>${game.name}</span></div>`;
+      li.classList.add("excluded");
 
-      validList.appendChild(li);
+      li.innerHTML = `
+        <div class="game-header">
+          <span class="arrow">▶</span>
+          <span>${game.name}</span>
+        </div>
+
+        <div class="game-reason" style="display:none;">
+          <div class="game-tags">
+            ${reasons.map(r => `<span class="tag">${r}</span>`).join("")}
+          </div>
+        </div>
+      `;
+
+      li.querySelector(".game-header").addEventListener("click", (e) => {
+        e.stopPropagation();
+
+        const reason = li.querySelector(".game-reason");
+        const arrow = li.querySelector(".arrow");
+
+        const open = reason.style.display === "block";
+
+        reason.style.display = open ? "none" : "block";
+        arrow.textContent = open ? "▶" : "▼";
+      });
+
+      excludedList.appendChild(li);
       return;
     }
 
-    // 🟡 ČÁSTEČNĚ (někdo nezná)
+    // 🟡 NĚKDO NEHRÁL
     if (hasUnknown && allKnow) {
 
       li.classList.add("partial");
@@ -460,40 +512,18 @@ function update() {
       return;
     }
 
-    // 🔴 VYŘAZENO
-    let reasons = [];
-
-    if (hasBan) reasons.push("BAN: " + banPlayers.join(", "));
-    if (hasUnknown) reasons.push("nehrál: " + unknowingPlayers.join(", "));
-
-    li.classList.add("excluded");
+    // 🟢 VALID
+    li.classList.add("valid");
 
     li.innerHTML = `
       <div class="game-header">
-        <span class="arrow">▶</span>
+        <span class="arrow"></span>
         <span>${game.name}</span>
-      </div>
-
-      <div class="game-reason" style="display:none;">
-        <div class="game-tags">
-          ${reasons.map(r => `<span class="tag">${r}</span>`).join("")}
-        </div>
       </div>
     `;
 
-    li.querySelector(".game-header").addEventListener("click", (e) => {
-      e.stopPropagation();
+    validList.appendChild(li);
 
-      const reason = li.querySelector(".game-reason");
-      const arrow = li.querySelector(".arrow");
-
-      const open = reason.style.display === "block";
-
-      reason.style.display = open ? "none" : "block";
-      arrow.textContent = open ? "▶" : "▼";
-    });
-
-    excludedList.appendChild(li);
   });
 }
 
