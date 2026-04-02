@@ -61,13 +61,79 @@ li {
 .excluded {
   background: #3d1f1f;
   color: #ff6b6b;
-  text-decoration: line-through;
 }
 
 input[type="checkbox"] {
   transform: scale(1.6);
   margin-right: 10px;
 }
+
+.game-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.arrow {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.excluded .game-header {
+  justify-content: center;
+}
+
+.game-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 5px;
+  justify-content: center;
+}
+
+.tag {
+  padding: 3px 8px;
+  border-radius: 10px;
+  background: #444;
+  color: white;
+  font-size: 13px;
+}
+
+button.active {
+  font-weight: bold;
+}
+
+button {
+  font-size: 16px;
+  padding: 8px 14px;
+  margin: 4px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  background: #fff;
+  color: #000;
+}
+
+button.active-valid {
+  background: #4CAF50;
+  color: #fff;
+}
+
+button.active-excluded {
+  background: #e53935;
+  color: #fff;
+}
+
+#btnValid.active {
+  background: #4CAF50;
+  color: #fff;
+}
+
+#btnExcluded.active {
+  background: #e53935;
+  color: #fff;
+}
+
 </style>
 </head>
 <body>
@@ -88,12 +154,19 @@ input[type="checkbox"] {
 </div>
 
 <div class="card">
-  <h2>Hry na výběr</h2>
-  <ul id="validGames"></ul>
-</div>
+  <h2>Hry</h2>
 
-<div class="card">
-  <h3 onclick="toggleExcluded()">Vyřazené hry ▼</h3>
+  <div style="text-align:center; margin-bottom:10px;">
+    <button id="btnValid">Vybrané</button>
+    <button id="btnExcluded">Vyřazené</button>
+  </div>
+
+  <label style="display:block; font-size:16px; margin-bottom:10px;">
+    <input type="checkbox" id="allKnowToggle">
+    Hráli všichni
+  </label>
+
+  <ul id="validGames"></ul>
   <ul id="excludedGames" style="display:none;"></ul>
 </div>
 
@@ -121,184 +194,180 @@ const blacklist = {
 const games = [
 
 /* 2 hráči */
-{name:"1989: Úsvit svobody", players:2, owners:["O"]},
-{name:"Alchymisté", players:2, owners:["T"]},
-{name:"Ankh: Bohové Egypta", players:2, owners:["T"]},
-{name:"Archa Nova", players:2, owners:["O","T","I"]},
-{name:"Bloodborne", players:2, owners:["O"]},
-{name:"Břink! V katakombách", players:2, owners:["O","T"]},
-{name:"Darwinovy cesty", players:2, owners:["T"]},
-{name:"Duchové ostrova", players:2, owners:["O","T"]},
-{name:"Euthia", players:2, owners:["O"]},
-{name:"Gaia Project", players:2, owners:["O","I"]},
-{name:"Great Western Trail", players:2, owners:["O","T","I"]},
-{name:"Hannibal & Hamilcar", players:2, owners:["R"]},
-{name:"Hostina pro Ódina", players:2, owners:["O"]},
-{name:"Hra o trůny: Karetní hra", players:2, owners:["O","T"]},
-{name:"Hrady v Burgundsku", players:2, owners:["O","T","I"]},
-{name:"Impérium: Dějiny", players:2, owners:["O","I"]},
-{name:"La Granja", players:2, owners:["O"]},
-{name:"Mage Knight", players:2, owners:["O"]},
-{name:"Master of Orion", players:2, owners:["O","I"]},
-{name:"Messina", players:2, owners:["K"]},
-{name:"Nukleum", players:2, owners:["T"]},
-{name:"Paladinové západního království", players:2, owners:["O"]},
-{name:"Pax Emantipation", players:2, owners:["O"]},
-{name:"Pax Renaissance", players:2, owners:["O"]},
-{name:"Piráti z Maracaiba", players:2, owners:["K"]},
-{name:"Podmořská města", players:2, owners:["K"]},
-{name:"RONE", players:2, owners:["O","K"]},
-{name:"RONE: Invaze", players:2, owners:["O"]},
-{name:"SETI", players:2, owners:["T","I","K"]},
-{name:"Star Wars: Rebellion", players:2, owners:["O"]},
-{name:"Střet civilizací", players:2, owners:["O","I"]},
-{name:"Studená válka", players:2, owners:["O"]},
-{name:"Válka o prsten", players:2, owners:["O","T"]},
-{name:"Voidfall", players:2, owners:["O"]},
-{name:"Ztracený ostrov Arnak", players:2, owners:["T","I"]},
+{name:"1989: Úsvit svobody", players:2, owners:["O"], knows: ["K","O"]},
+{name:"Alchymisté", players:2, owners:["T"], knows:["M","T"]},
+{name:"Ankh: Bohové Egypta", players:2, owners:["T"], knows:["B","I","K","M","O","R","T"]},
+{name:"Archa Nova", players:2, owners:["O","T","I"], knows:["I","K","M","O","R","T"]},
+{name:"Bloodborne", players:2, owners:["O"], knows:["O","R"]},
+{name:"Břink! V katakombách", players:2, owners:["O","T"], knows:["B","I","K","M","O","R","T"]},
+{name:"Darwinovy cesty", players:2, owners:["T"], knows:["M","O","T"]},
+{name:"Duchové ostrova", players:2, owners:["O","T"], knows:["B","K","O","R","T"]},
+{name:"Euthia", players:2, owners:["O"], knows:["K","O","R","T"]},
+{name:"Gaia Project", players:2, owners:["O","I"], knows:["I","K","M","O","R","T"]},
+{name:"Great Western Trail", players:2, owners:["O","T","I"], knows:["B","I","K","M","O","R","T"]},
+{name:"Hannibal & Hamilcar", players:2, owners:["R"], knows:["O","R"]},
+{name:"Hostina pro Ódina", players:2, owners:["O"], knows:["K","O","R"]},
+{name:"Hra o trůny: Karetní hra", players:2, owners:["O","T"], knows:["K","O","R"]},
+{name:"Hrady v Burgundsku", players:2, owners:["O","T","I"], knows:["B","I","K","M","O","R","T"]},
+{name:"Impérium: Dějiny", players:2, owners:["O","I"], knows:["B","I","K","O","R"]},
+{name:"La Granja", players:2, owners:["O"], knows:["B","I","K","M","O","R","T"]},
+{name:"Mage Knight", players:2, owners:["O"], knows:["K","O","R","T"]},
+{name:"Master of Orion", players:2, owners:["O","I"], knows:["K","O","R","T"]},
+{name:"Messina", players:2, owners:["K"], knows:["I","K","O","R","T"]},
+{name:"Nukleum", players:2, owners:["T"], knows:["K","M","O","T"]},
+{name:"Paladinové západního království", players:2, owners:["O"], knows:["K","M","O","R","T"]},
+{name:"Pax Emantipation", players:2, owners:["O"], knows:["K","O","R","T"]},
+{name:"Pax Renaissance", players:2, owners:["O"], knows:["K","O","R"]},
+{name:"Piráti z Maracaiba", players:2, owners:["K"], knows:["K","M","O","R","T"]},
+{name:"Podmořská města", players:2, owners:["K"], knows:["I","K","O","R","T"]},
+{name:"RONE", players:2, owners:["O","K"], knows:["K","O","R"]},
+{name:"RONE: Invaze", players:2, owners:["O"], knows:["O"]},
+{name:"SETI", players:2, owners:["T","I","K"], knows:["I","K","M","O","R","T"]},
+{name:"Star Wars: Rebellion", players:2, owners:["O"], knows:["K","O","R","T"]},
+{name:"Střet civilizací", players:2, owners:["O","I"], knows:["I","K","O","R","T"]},
+{name:"Studená válka", players:2, owners:["O"], knows:["K","O","R"]},
+{name:"Válka o prsten", players:2, owners:["O","T"], knows:["K","O","R"]},
+{name:"Voidfall", players:2, owners:["O"], knows:["O","R"]},
+{name:"Ztracený ostrov Arnak", players:2, owners:["T","I"], knows:["B","I","K","M","O","R","T"]},
 
 /* 3 hráči */
-{name:"Alchymisté", players:3, owners:["T"]},
-{name:"Archa Nova", players:3, owners:["O","T","I"]},
-{name:"Břink! V katakombách", players:3, owners:["O","T"]},
-{name:"Caverna", players:3, owners:["O","I"]},
-{name:"Civilization: Nový úsvit", players:3, owners:["O","I"]},
-{name:"Concordia", players:3, owners:["I"]},
-{name:"Darwinovy cesty", players:3, owners:["T"]},
-{name:"Duchové ostrova", players:3, owners:["O","T"]},
-{name:"Duna: Imperium", players:3, owners:["I"]},
-{name:"Eclipse", players:3, owners:["T"]},
-{name:"Gaia Project", players:3, owners:["O","I"]},
-{name:"Great Western Trail", players:3, owners:["O","T","I"]},
-{name:"Hostina pro Ódina", players:3, owners:["O"]},
-{name:"Hra o trůny: Karetní hra", players:3, owners:["O","T"]},
-{name:"Hrady v Burgundsku", players:3, owners:["O","T","I"]},
-{name:"Churchill", players:3, owners:["O"]},
-{name:"Impérium: Dějiny", players:3, owners:["O","I"]},
-{name:"It's a Wonderful World", players:3, owners:["I"]},
-{name:"Jízdenky, prosím! Evropa", players:3, owners:["O"]},
-{name:"La Granja", players:3, owners:["O"]},
-{name:"Mars: Terraformace", players:3, owners:["O","T","I"]},
-{name:"Master of Orion", players:3, owners:["O","I"]},
-{name:"Messina", players:3, owners:["T","K"]},
-{name:"Nukleum", players:3, owners:["T"]},
-{name:"Paladinové západního království", players:3, owners:["O"]},
-{name:"Pax Emantipation", players:3, owners:["O"]},
-{name:"Pax Pamir", players:3, owners:["I"]},
-{name:"Pax Renaissance", players:3, owners:["O"]},
-{name:"Piráti z Maracaiba", players:3, owners:["K"]},
-{name:"Podmořská města", players:3, owners:["K"]},
-{name:"Přehrada", players:3, owners:["O"]},
-{name:"Puerto Rico", players:3, owners:["O","I"]},
-{name:"Rallyman GT", players:3, owners:["O"]},
-{name:"Scythe", players:3, owners:["T","I"]},
-{name:"SETI", players:3, owners:["T","I","K"]},
-{name:"Small World", players:3, owners:["T"]},
-{name:"Střet civilizací", players:3, owners:["O","I"]},
-{name:"Truhlaříci", players:3, owners:["T"]},
-{name:"Voidfall", players:3, owners:["O"]},
-{name:"Zima mrtvých", players:3, owners:["T"]},
-{name:"Ztracený ostrov Arnak", players:3, owners:["T","I"]},
+{name:"Alchymisté", players:3, owners:["T"], knows:["M","T"]},
+{name:"Archa Nova", players:3, owners:["O","T","I"], knows:["I","K","M","O","R","T"]},
+{name:"Břink! V katakombách", players:3, owners:["O","T"], knows:["B","I","K","M","O","R","T"]},
+{name:"Caverna", players:3, owners:["O","I"], knows:["B","I","M","O","R","T"]},
+{name:"Civilization: Nový úsvit", players:3, owners:["O","I"], knows:["B","I","K","M","O","R","T"]},
+{name:"Concordia", players:3, owners:["I"], knows:["I","K","M","O","R","T"]},
+{name:"Darwinovy cesty", players:3, owners:["T"], knows:["M","O","T"]},
+{name:"Duchové ostrova", players:3, owners:["O","T"], knows:["B","K","O","R","T"]},
+{name:"Duna: Imperium", players:3, owners:["I"], knows:["I","K","O","R"]},
+{name:"Eclipse", players:3, owners:["T"], knows:["I","K","O","R","T"]},
+{name:"Gaia Project", players:3, owners:["O","I"], knows:["I","K","M","O","R","T"]},
+{name:"Great Western Trail", players:3, owners:["O","T","I"], knows:["B","I","K","M","O","R","T"]},
+{name:"Hostina pro Ódina", players:3, owners:["O"], knows:["K","O","R"]},
+{name:"Hra o trůny: Karetní hra", players:3, owners:["O","T"], knows:["K","O","R"]},
+{name:"Hrady v Burgundsku", players:3, owners:["O","T","I"], knows:["B","I","K","M","O","R","T"]},
+{name:"Churchill", players:3, owners:["O"], knows:["K","O","R"]},
+{name:"Impérium: Dějiny", players:3, owners:["O","I"], knows:["B","I","K","O","R"]},
+{name:"It's a Wonderful World", players:3, owners:["I"], knows:["I","K","M","O","R","T"]},
+{name:"Jízdenky, prosím! Evropa", players:3, owners:["O"], knows:["K","O"]},
+{name:"La Granja", players:3, owners:["O"], knows:["B","I","K","M","O","R","T"]},
+{name:"Mars: Terraformace", players:3, owners:["O","T","I"], knows:["B","I","K","M","O","R","T"]},
+{name:"Master of Orion", players:3, owners:["O","I"], knows:["K","O","R","T"]},
+{name:"Messina", players:3, owners:["T","K"], knows:["I","K","O","R","T"]},
+{name:"Nukleum", players:3, owners:["T"], knows:["K","M","O","T"]},
+{name:"Paladinové západního království", players:3, owners:["O"], knows:["K","M","O","R","T"]},
+{name:"Pax Emantipation", players:3, owners:["O"], knows:["K","O","R","T"]},
+{name:"Pax Pamir", players:3, owners:["I"], knows:["I","K","M","O","R","T"]},
+{name:"Pax Renaissance", players:3, owners:["O"], knows:["K","O","R"]},
+{name:"Piráti z Maracaiba", players:3, owners:["K"], knows:["K","M","O","R","T"]},
+{name:"Podmořská města", players:3, owners:["K"], knows:["I","K","O","R","T"]},
+{name:"Přehrada", players:3, owners:["O"], knows:["I","K","M","O","R","T"]},
+{name:"Puerto Rico", players:3, owners:["O","I"], knows:["B","I","K","M","O","R","T"]},
+{name:"Rallyman GT", players:3, owners:["O"], knows:["B","I","K","M","O","R","T"]},
+{name:"Scythe", players:3, owners:["T","I"], knows:["I","K","O","R","T"]},
+{name:"SETI", players:3, owners:["T","I","K"], knows:["I","K","M","O","R","T"]},
+{name:"Small World", players:3, owners:["T"], knows:["B","I","K","O","R","T"]},
+{name:"Střet civilizací", players:3, owners:["O","I"], knows:["I","K","O","R","T"]},
+{name:"Truhlaříci", players:3, owners:["T"], knows:["I","K","M","R","T"]},
+{name:"Voidfall", players:3, owners:["O"], knows:["O","R"]},
+{name:"Zima mrtvých", players:3, owners:["T"], knows:["I","K","O","R","T"]},
+{name:"Ztracený ostrov Arnak", players:3, owners:["T","I"], knows:["B","I","K","M","O","R","T"]},
 
 /* 4 hráči */
-{name:"7 Divů světa", players:4, owners:["I"]},
-{name:"Alchymisté", players:4, owners:["T"]},
-{name:"Ankh: Bohové Egypta", players:4, owners:["T"]},
-{name:"Archa Nova", players:4, owners:["O","T","I"]},
-{name:"Blood Rage", players:4, owners:["T"]},
-{name:"Brass: Birmingham", players:4, owners:["O","I"]},
-{name:"Brian Boru", players:4, owners:["I"]},
-{name:"Břink! V katakombách", players:4, owners:["O","T"]},
-{name:"Caverna", players:4, owners:["O","I"]},
-{name:"Civilization: Nový úsvit", players:4, owners:["O","I"]},
-{name:"Concordia", players:4, owners:["I"]},
-{name:"Darwinovy cesty", players:4, owners:["T"]},
-{name:"Duna: Imperium", players:4, owners:["I"]},
-{name:"Eclipse", players:4, owners:["T"]},
-{name:"Ethnos", players:4, owners:["O","T"]},
-{name:"Gaia Project", players:4, owners:["O","I"]},
-{name:"Great Western Trail", players:4, owners:["O","T","I"]},
-{name:"Heat", players:4, owners:["I"]},
-{name:"Hostina pro Ódina", players:4, owners:["O"]},
-{name:"Hrady v Burgundsku", players:4, owners:["O","T","I"]},
-{name:"Istanbul", players:4, owners:["O","I"]},
-{name:"It's a Wonderful World", players:4, owners:["I"]},
-{name:"Jízdenky, prosím! Evropa", players:4, owners:["O"]},
-{name:"La Granja", players:4, owners:["O"]},
-{name:"Mars: Terraformace", players:4, owners:["O","T","I"]},
-{name:"Master of Orion", players:4, owners:["O","I"]},
-{name:"Messina", players:4, owners:["T","R"]},
-{name:"Nemesis", players:4, owners:["T"]},
-{name:"Nukleum", players:4, owners:["T"]},
-{name:"Pax Renaissance", players:4, owners:["O"]},
-{name:"Pax Pamir", players:4, owners:["I"]},
-{name:"Piráti z Maracaiba", players:4, owners:["R"]},
-{name:"Přehrada", players:4, owners:["O"]},
-{name:"Podmořská města", players:4, owners:["K"]},
-{name:"Puerto Rico", players:4, owners:["O","I"]},
-{name:"Rallyman GT", players:4, owners:["O"]},
-{name:"Rising Sun", players:4, owners:["R"]},
-{name:"Root", players:4, owners:["T","I"]},
-{name:"Scythe", players:4, owners:["T","I"]},
-{name:"SETI", players:4, owners:["T","I","K"]},
-{name:"Small World", players:4, owners:["T"]},
-{name:"Střet civilizací", players:4, owners:["O","I"]},
-{name:"Truhlaříci", players:4, owners:["T"]},
-{name:"Válka o prsten: Karetní hra", players:4, owners:["I"]},
-{name:"XCOM", players:4, owners:["T"]},
-{name:"Zima mrtvých", players:4, owners:["T"]},
-{name:"Ztracený ostrov Arnak", players:4, owners:["T","I"]},
+{name:"7 Divů světa", players:4, owners:["I"], knows:["I","K","O","R","T"]},
+{name:"Alchymisté", players:4, owners:["T"], knows:["M","T"]},
+{name:"Ankh: Bohové Egypta", players:4, owners:["T"], knows:["B","I","K","M","O","R","T"]},
+{name:"Archa Nova", players:4, owners:["O","T","I"], knows:["I","K","M","O","R","T"]},
+{name:"Blood Rage", players:4, owners:["T"], knows:["I","K","M","O","R","T"]},
+{name:"Brass: Birmingham", players:4, owners:["O","I"], knows:["I","K","M","O","R","T"]},
+{name:"Brian Boru", players:4, owners:["I"], knows:["B","I","K","M","R","T"]},
+{name:"Břink! V katakombách", players:4, owners:["O","T"], knows:["B","I","K","M","O","R","T"]},
+{name:"Caverna", players:4, owners:["O","I"], knows:["B","I","M","O","R","T"]},
+{name:"Civilization: Nový úsvit", players:4, owners:["O","I"], knows:["B","I","K","M","O","R","T"]},
+{name:"Concordia", players:4, owners:["I"], knows:["I","K","M","O","R","T"]},
+{name:"Darwinovy cesty", players:4, owners:["T"], knows:["M","O","T"]},
+{name:"Duna: Imperium", players:4, owners:["I"], knows:["I","K","O","R"]},
+{name:"Eclipse", players:4, owners:["T"], knows:["I","K","O","R","T"]},
+{name:"Ethnos", players:4, owners:["O","T"], knows:["B","I","K","M","O","R","T"]},
+{name:"Gaia Project", players:4, owners:["O","I"], knows:["I","K","M","O","R","T"]},
+{name:"Great Western Trail", players:4, owners:["O","T","I"], knows:["B","I","K","M","O","R","T"]},
+{name:"Heat", players:4, owners:["I"], knows:["I","K","M","O","R","T"]},
+{name:"Hostina pro Ódina", players:4, owners:["O"], knows:["K","O","R"]},
+{name:"Hrady v Burgundsku", players:4, owners:["O","T","I"], knows:["B","I","K","M","O","R","T"]},
+{name:"Istanbul", players:4, owners:["O","I"], knows:["I","K","M","O","R","T"]},
+{name:"It's a Wonderful World", players:4, owners:["I"], knows:["I","K","M","O","R","T"]},
+{name:"Jízdenky, prosím! Evropa", players:4, owners:["O"], knows:["K","O"]},
+{name:"La Granja", players:4, owners:["O"], knows:["B","I","K","M","O","R","T"]},
+{name:"Mars: Terraformace", players:4, owners:["O","T","I"], knows:["B","I","K","M","O","R","T"]},
+{name:"Master of Orion", players:4, owners:["O","I"], knows:["K","O","R","T"]},
+{name:"Messina", players:4, owners:["T","R"], knows:["I","K","O","R","T"]},
+{name:"Nemesis", players:4, owners:["T"], knows:["I","K","M","O","R","T"]},
+{name:"Nukleum", players:4, owners:["T"], knows:["K","M","O","T"]},
+{name:"Pax Pamir", players:4, owners:["I"], knows:["I","K","M","O","R","T"]},
+{name:"Pax Renaissance", players:4, owners:["O"], knows:["K","O","R"]},
+{name:"Piráti z Maracaiba", players:4, owners:["K"], knows:["K","M","O","R","T"]},
+{name:"Přehrada", players:4, owners:["O"], knows:["I","K","M","O","R","T"]},
+{name:"Podmořská města", players:4, owners:["K"], knows:["I","K","O","R","T"]},
+{name:"Puerto Rico", players:4, owners:["O","I"], knows:["B","I","K","M","O","R","T"]},
+{name:"Rallyman GT", players:4, owners:["O"], knows:["B","I","K","M","O","R","T"]},
+{name:"Rising Sun", players:4, owners:["R"], knows:["B","I","K","M","O","R","T"]},
+{name:"Root", players:4, owners:["T","I"], knows:["I","K","O","R","T"]},
+{name:"Scythe", players:4, owners:["T","I"], knows:["I","K","O","R","T"]},
+{name:"SETI", players:4, owners:["T","I","K"], knows:["I","K","M","O","R","T"]},
+{name:"Small World", players:4, owners:["T"], knows:["B","I","K","O","R","T"]},
+{name:"Střet civilizací", players:4, owners:["O","I"], knows:["I","K","O","R","T"]},
+{name:"Truhlaříci", players:4, owners:["T"], knows:["I","K","M","R","T"]},
+{name:"Válka o prsten: Karetní hra", players:4, owners:["I"], knows:["I","K","O","R","T"]},
+{name:"XCOM", players:4, owners:["T"], knows:["I","K","M","O","R","T"]},
+{name:"Zima mrtvých", players:4, owners:["T"], knows:["I","K","O","R","T"]},
+{name:"Ztracený ostrov Arnak", players:4, owners:["T","I"], knows:["B","I","K","M","O","R","T"]},
 
 /* 5 hráčů */
-{name:"7 Divů světa", players:5, owners:["I"]},
-{name:"Ankh: Bohové Egypta", players:5, owners:["T"]},
-{name:"Běsnění Drákuly", players:5, owners:["O","I"]},
-{name:"Blood Rage", players:5, owners:["T"]},
-{name:"Břink! V katakombách", players:5, owners:["O"]},
-{name:"Caverna", players:5, owners:["O","I"]},
-{name:"Civilization: Nový úsvit", players:5, owners:["O","I"]},
-{name:"Concordia", players:5, owners:["I"]},
-{name:"Eclipse", players:5, owners:["T"]},
-{name:"Ethnos", players:5, owners:["O","T"]},
-{name:"Heat", players:5, owners:["I"]},
-{name:"Istanbul", players:5, owners:["O","I"]},
-{name:"It's a Wonderful World", players:5, owners:["I"]},
-{name:"Jízdenky, prosím! Evropa", players:5, owners:["O"]},
-{name:"Mars: Terraformace", players:5, owners:["O","T","I"]},
-{name:"Nemesis", players:5, owners:["T"]},
-{name:"Pax Pamir", players:5, owners:["I"]},
-{name:"Puerto Rico", players:5, owners:["O","I"]},
-{name:"Rallyman GT", players:5, owners:["O"]},
-{name:"Rising Sun", players:5, owners:["R"]},
-{name:"Scythe", players:5, owners:["T","I"]},
-{name:"Small World", players:5, owners:["T","I"]},
-{name:"Zima mrtvých", players:5, owners:["T"]},
-{name:"Zkáza na orbitě", players:5, owners:["T"]},
+{name:"7 Divů světa", players:5, owners:["I"], knows:["I","K","O","R","T"]},
+{name:"Ankh: Bohové Egypta", players:5, owners:["T"], knows:["B","I","K","M","O","R","T"]},
+{name:"Běsnění Drákuly", players:5, owners:["O","I"], knows:["I","K","M","O","R","T"]},
+{name:"Blood Rage", players:5, owners:["T"], knows:["I","K","M","O","R","T"]},
+{name:"Břink! V katakombách", players:5, owners:["O"], knows:["B","I","K","M","O","R","T"]},
+{name:"Caverna", players:5, owners:["O","I"], knows:["B","I","M","O","R","T"]},
+{name:"Civilization: Nový úsvit", players:5, owners:["O","I"], knows:["B","I","K","M","O","R","T"]},
+{name:"Concordia", players:5, owners:["I"], knows:["I","K","M","O","R","T"]},
+{name:"Eclipse", players:5, owners:["T"], knows:["I","K","O","R","T"]},
+{name:"Ethnos", players:5, owners:["O","T"], knows:["B","I","K","M","O","R","T"]},
+{name:"Heat", players:5, owners:["I"], knows:["I","K","M","O","R","T"]},
+{name:"Istanbul", players:5, owners:["O","I"], knows:["I","K","M","O","R","T"]},
+{name:"It's a Wonderful World", players:5, owners:["I"], knows:["I","K","M","O","R","T"]},
+{name:"Jízdenky, prosím! Evropa", players:5, owners:["O"], knows:["K","O"]},
+{name:"Mars: Terraformace", players:5, owners:["O","T","I"], knows:["B","I","K","M","O","R","T"]},
+{name:"Nemesis", players:5, owners:["T"], knows:["I","K","M","O","R","T"]},
+{name:"Pax Pamir", players:5, owners:["I"], knows:["I","K","M","O","R","T"]},
+{name:"Puerto Rico", players:5, owners:["O","I"], knows:["B","I","K","M","O","R","T"]},
+{name:"Rallyman GT", players:5, owners:["O"], knows:["B","I","K","M","O","R","T"]},
+{name:"Rising Sun", players:5, owners:["R"], knows:["B","I","K","M","O","R","T"]},
+{name:"Scythe", players:5, owners:["T","I"], knows:["I","K","O","R","T"]},
+{name:"Small World", players:5, owners:["T","I"], knows:["B","I","K","O","R","T"]},
+{name:"Zima mrtvých", players:5, owners:["T"], knows:["I","K","O","R","T"]},
+{name:"Zkáza na orbitě", players:5, owners:["T"], knows:["I","M","O","R","T"]},
 
 /* 6+ hráčů */
-{name:"7 Divů světa", players:6, owners:["I"]},
-{name:"Břink! V katakombách", players:6, owners:["O"]},
-{name:"Eclipse", players:6, owners:["T"]},
-{name:"Ethnos", players:6, owners:["O","T"]},
-{name:"Heat", players:6, owners:["I"]},
-{name:"Hra o trůny", players:6, owners:["T"]},
-{name:"It's a Wonderful World", players:6, owners:["I"]},
-{name:"Rallyman GT", players:6, owners:["O"]},
-{name:"Rising Sun", players:6, owners:["R"]},
-{name:"Zkáza na orbitě", players:6, owners:["T"]},
-{name:"Zombicide", players:6, owners:["T"]},
+{name:"7 Divů světa", players:6, owners:["I"], knows:["I","K","O","R","T"]},
+{name:"Břink! V katakombách", players:6, owners:["O"], knows:["B","I","K","M","O","R","T"]},
+{name:"Eclipse", players:6, owners:["T"], knows:["I","K","O","R","T"]},
+{name:"Ethnos", players:6, owners:["O","T"], knows:["B","I","K","M","O","R","T"]},
+{name:"Heat", players:6, owners:["I"], knows:["I","K","M","O","R","T"]},
+{name:"Hra o trůny", players:6, owners:["T"], knows:["B","I","K","O","R","T"]},
+{name:"It's a Wonderful World", players:6, owners:["I"], knows:["I","K","M","O","R","T"]},
+{name:"Rallyman GT", players:6, owners:["O"], knows:["B","I","K","M","O","R","T"]},
+{name:"Rising Sun", players:6, owners:["R"], knows:["B","I","K","M","O","R","T"]},
+{name:"Zkáza na orbitě", players:6, owners:["T"], knows:["I","M","O","R","T"]},
+{name:"Zombicide", players:6, owners:["T"], knows:["I","K","M","O","R","T"]},
 
 ];
 
-function toggleExcluded() {
-  const el = document.getElementById("excludedGames");
-  el.style.display = (el.style.display === "none") ? "block" : "none";
-}
-
 function update() {
 
-  const selected = [...document.querySelectorAll("input:checked")].map(e => e.value);
-  const count = selected.length;
+  const selected = [...document.querySelectorAll("input[type=checkbox]:checked")]
+    .filter(e => e.id !== "allKnowToggle")
+    .map(e => e.value);
 
   const validList = document.getElementById("validGames");
   const excludedList = document.getElementById("excludedGames");
@@ -306,69 +375,150 @@ function update() {
   validList.innerHTML = "";
   excludedList.innerHTML = "";
 
+  const count = selected.length;
   if (count === 0) return;
 
   let letters = selected.map(p => playersMap[p]);
+  const allKnow = document.getElementById("allKnowToggle").checked;
 
-  // SDÍLENÍ HER (T → M)
-  if (selected.includes("Míša") && !selected.includes("Tacit")) {
-    letters.push("T");
-  }
+  games.forEach(game => {
 
-  const validGames = games.filter(game => {
+    // 1. počet hráčů
+    if (game.players !== count) return;
 
-    if (game.players !== count) return false;
+    // 2. majitel
+    if (!game.owners.some(o => letters.includes(o))) return;
 
+    let banPlayers = [];
+    let unknowingPlayers = [];
+
+    // 3. BAN
     for (let player of selected) {
-      if (blacklist[player]?.includes(game.name)) return false;
+      if (blacklist[player]?.includes(game.name)) {
+        banPlayers.push(player);
+      }
     }
 
-    if (!game.owners.some(o => letters.includes(o))) return false;
+    // 4. NEUMÍ (jen když je zapnuto "všichni hráli")
+    if (allKnow && game.knows) {
+      for (let player of selected) {
+        let code = playersMap[player];
 
-    return true;
-  });
+        if (!game.knows.includes(code)) {
+          unknowingPlayers.push(player);
+        }
+      }
+    }
 
-  games.filter(g => g.players === count).forEach(game => {
+    const hasBan = banPlayers.length > 0;
+    const hasUnknown = unknowingPlayers.length > 0;
 
     const li = document.createElement("li");
-    li.innerHTML = game.name;
 
-    if (validGames.includes(game)) {
+    // 🟢 VALID (žádný problém)
+    if (!hasBan && (!allKnow || !hasUnknown)) {
 
-  li.classList.add("valid");
-  li.style.fontWeight = "bold";
-  validList.appendChild(li);
+      li.classList.add("valid");
 
-} else {
+      li.innerHTML = `<div class="game-header"><span>${game.name}</span></div>`;
 
-  // zjisti kdo hru vyřadil
-  let blockers = [];
-
-  for (let player of selected) {
-    if (blacklist[player]?.includes(game.name)) {
-      blockers.push(player);
+      validList.appendChild(li);
+      return;
     }
-  }
 
-  li.innerHTML = game.name + " ❌ (" + blockers.join(", ") + ")";
+    // 🟡 ČÁSTEČNĚ (někdo nezná)
+    if (hasUnknown && allKnow) {
 
-  li.classList.add("excluded");
-  li.style.textDecoration = "line-through";
+      li.classList.add("partial");
 
-  excludedList.appendChild(li);
-}
+      li.innerHTML = `
+        <div class="game-header">
+          <span class="arrow">▶</span>
+          <span>${game.name}</span>
+        </div>
 
+        <div class="game-reason" style="display:none;">
+          <div class="game-tags">
+            ${unknowingPlayers.map(p => `<span class="tag">${p} nezná</span>`).join("")}
+          </div>
+        </div>
+      `;
+
+      li.querySelector(".game-header").addEventListener("click", (e) => {
+        e.stopPropagation();
+
+        const reason = li.querySelector(".game-reason");
+        const arrow = li.querySelector(".arrow");
+
+        const open = reason.style.display === "block";
+
+        reason.style.display = open ? "none" : "block";
+        arrow.textContent = open ? "▶" : "▼";
+      });
+
+      validList.appendChild(li);
+      return;
+    }
+
+    // 🔴 VYŘAZENO
+    let reasons = [];
+
+    if (hasBan) reasons.push("BAN: " + banPlayers.join(", "));
+    if (hasUnknown) reasons.push("nehrál: " + unknowingPlayers.join(", "));
+
+    li.classList.add("excluded");
+
+    li.innerHTML = `
+      <div class="game-header">
+        <span class="arrow">▶</span>
+        <span>${game.name}</span>
+      </div>
+
+      <div class="game-reason" style="display:none;">
+        <div class="game-tags">
+          ${reasons.map(r => `<span class="tag">${r}</span>`).join("")}
+        </div>
+      </div>
+    `;
+
+    li.querySelector(".game-header").addEventListener("click", (e) => {
+      e.stopPropagation();
+
+      const reason = li.querySelector(".game-reason");
+      const arrow = li.querySelector(".arrow");
+
+      const open = reason.style.display === "block";
+
+      reason.style.display = open ? "none" : "block";
+      arrow.textContent = open ? "▶" : "▼";
+    });
+
+    excludedList.appendChild(li);
   });
-
 }
 
 document.querySelectorAll("input").forEach(cb => {
   cb.addEventListener("change", update);
 });
 
+function showValid() {
+  validGames.style.display = "block";
+  excludedGames.style.display = "none";
+  btnValid.classList.add("active");
+  btnExcluded.classList.remove("active");
+}
+
+function showExcluded() {
+  validGames.style.display = "none";
+  excludedGames.style.display = "block";
+  btnExcluded.classList.add("active");
+  btnValid.classList.remove("active");
+}
+
+btnValid.addEventListener("click", showValid);
+btnExcluded.addEventListener("click", showExcluded);
+
 update();
+showValid();
 
 </script>
-
-</body>
-</html>
