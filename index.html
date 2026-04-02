@@ -14,44 +14,41 @@ body {
   text-align: center;
   font-size: 20px;
   margin: 0;
-  padding: 10px;
+  padding: 6px; /* menší padding */
 }
 
 .card {
   background: linear-gradient(145deg, #1c1c1c, #141414);
   border-radius: 16px;
-  padding: 18px;
-  margin: 16px auto;
+  padding: 12px; /* menší */
+  margin: 10px auto; /* menší mezera mezi kartami */
   max-width: 600px;
 
-  /* jemný stín */
   box-shadow: 
     0 4px 10px rgba(0,0,0,0.5),
     inset 0 1px 1px rgba(255,255,255,0.05);
 
-  /* jemná hranice */
   border: 1px solid rgba(255,255,255,0.05);
 
-  /* plynulost */
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-/* hover efekt */
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: 
-    0 8px 20px rgba(0,0,0,0.6),
-    inset 0 1px 1px rgba(255,255,255,0.05);
+/* nadpisy (Hráči, Hry) */
+h2 {
+  margin-top: 5px;     /* 🔥 posun nahoru */
+  margin-bottom: 8px;  /* 🔥 menší mezera pod nadpisem */
 }
 
+/* seznam hráčů */
 .players {
   display: inline-block;
   text-align: left;
 }
 
+/* jednotliví hráči */
 .players label {
   display: block;
-  margin: 8px 0;
+  margin: 5px 0; /* 🔥 menší mezera mezi hráči */
 }
 
 @media (max-width: 600px) {
@@ -63,14 +60,15 @@ body {
 ul {
   list-style: none;
   padding: 0;
+  margin-top: 8px; /* 🔥 menší mezera */
 }
 
 li {
-  margin: 10px 0;
+  margin: 6px 0; /* 🔥 menší mezera mezi hrami */
   padding: 10px;
   border-radius: 12px;
   background: #2a2a2a;
-  text-align: left; /* 🔥 důležité */
+  text-align: left;
 }
 
 .valid {
@@ -90,16 +88,16 @@ input[type="checkbox"] {
   margin-right: 10px;
 }
 
-/* 🔥 JEDNOTNÝ HEADER */
+/* header hry */
 .game-header {
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* klíčové */
+  justify-content: flex-start;
   gap: 10px;
   width: 100%;
 }
 
-/* 🔥 ŠIPKA – musí mít stejný prostor */
+/* šipka */
 .arrow {
   width: 20px;
   min-width: 20px;
@@ -115,7 +113,7 @@ input[type="checkbox"] {
   gap: 6px;
   flex-wrap: wrap;
   margin-top: 5px;
-  justify-content: flex-start; /* 🔥 změna z center */
+  justify-content: flex-start;
 }
 
 .tag {
@@ -129,9 +127,9 @@ input[type="checkbox"] {
 /* tlačítka */
 button {
   font-size: 16px;
-  padding: 10px 16px;
-  margin: 5px;
-  border-radius: 12px;
+  padding: 8px 14px;  /* 🔥 menší */
+  margin: 3px;        /* 🔥 menší mezera */
+  border-radius: 10px;
   border: none;
   cursor: pointer;
 
