@@ -196,6 +196,11 @@ button:active {
   display: none !important;
 }
 
+.has-tooltip {
+  cursor: help;
+  text-decoration: underline dotted;
+}
+
 </style>
 </head>
 <body>
@@ -796,76 +801,80 @@ function updateStats() {
   });
 
   // 🏆 VÝPIS
-  function addSection(title, arr, key) {
+function addSection(title, arr, key, withTooltip = false) {
 
-    const h = document.createElement("li");
-    h.innerHTML = `<strong>${title}</strong>`;
-    statsList.appendChild(h);
+  const h = document.createElement("li");
+  h.innerHTML = `<strong>${title}</strong>`;
+  statsList.appendChild(h);
 
-    const container = document.createElement("div");
+  const container = document.createElement("div");
 
-    const sorted = arr.sort((a, b) => b[1][key] - a[1][key]);
+  const sorted = arr.sort((a, b) => b[1][key] - a[1][key]);
 
-    const visible = sorted.slice(0, 3);
-    const hidden = sorted.slice(3);
+  const visible = sorted.slice(0, 3);
+  const hidden = sorted.slice(3);
 
-    visible.forEach(([name, s], i) => {
+  visible.forEach(([name, s], i) => {
+    const div = document.createElement("div");
+
+    div.className = "stat-item";
+    if (i === 0) div.classList.add("first");
+    if (i === 1) div.classList.add("second");
+    if (i === 2) div.classList.add("third");
+
+    div.innerHTML = `
+      <span>${i + 1}. ${name}</span>
+      <strong 
+        ${withTooltip ? `title="${gameBanUsers[name]?.join(", ") || ""}" class="has-tooltip"` : ""}
+      >
+        ${s[key]}
+      </strong>
+    `;
+
+    container.appendChild(div);
+  });
+
+  if (hidden.length > 0) {
+
+    const moreBtn = document.createElement("div");
+    moreBtn.innerHTML = "▼ zobrazit více";
+    moreBtn.style.cursor = "pointer";
+    moreBtn.style.textAlign = "center";
+    moreBtn.style.margin = "8px";
+    moreBtn.style.color = "#ffcc00";
+
+    const hiddenContainer = document.createElement("div");
+    hiddenContainer.style.display = "none";
+
+    hidden.forEach(([name, s], i) => {
       const div = document.createElement("div");
 
       div.className = "stat-item";
-      if (i === 0) div.classList.add("first");
-      if (i === 1) div.classList.add("second");
-      if (i === 2) div.classList.add("third");
 
       div.innerHTML = `
-        <span>${i + 1}. ${name}</span>
-        <strong title="${gameBanUsers[name] ? gameBanUsers[name].join(", ") : ""}">
+        <span>${i + 4}. ${name}</span>
+        <strong 
+          ${withTooltip ? `title="${gameBanUsers[name]?.join(", ") || ""}" class="has-tooltip"` : ""}
+        >
           ${s[key]}
         </strong>
       `;
 
-      container.appendChild(div);
+      hiddenContainer.appendChild(div);
     });
 
-    if (hidden.length > 0) {
+    moreBtn.addEventListener("click", () => {
+      const open = hiddenContainer.style.display === "block";
+      hiddenContainer.style.display = open ? "none" : "block";
+      moreBtn.innerHTML = open ? "▼ zobrazit více" : "▲ skrýt";
+    });
 
-      const moreBtn = document.createElement("div");
-      moreBtn.innerHTML = "▼ zobrazit více";
-      moreBtn.style.cursor = "pointer";
-      moreBtn.style.textAlign = "center";
-      moreBtn.style.margin = "8px";
-      moreBtn.style.color = "#ffcc00";
-
-      const hiddenContainer = document.createElement("div");
-      hiddenContainer.style.display = "none";
-
-    hidden.forEach(([name, s], i) => {
-  const div = document.createElement("div");
-
-  div.className = "stat-item";
-
-  div.innerHTML = `
-    <span>${i + 4}. ${name}</span>
-    <strong title="${gameBanUsers[name] ? gameBanUsers[name].join(", ") : ""}">
-      ${s[key]}
-    </strong>
-  `;
-
-  hiddenContainer.appendChild(div);
-});
-
-      moreBtn.addEventListener("click", () => {
-        const open = hiddenContainer.style.display === "block";
-        hiddenContainer.style.display = open ? "none" : "block";
-        moreBtn.innerHTML = open ? "▼ zobrazit více" : "▲ skrýt";
-      });
-
-      container.appendChild(moreBtn);
-      container.appendChild(hiddenContainer);
-    }
-
-    statsList.appendChild(container);
+    container.appendChild(moreBtn);
+    container.appendChild(hiddenContainer);
   }
+
+  statsList.appendChild(container);
+}
 
   const entries = Object.entries(stats);
 
@@ -879,6 +888,6 @@ addSection("💀 Nejvíc blokovaný", entries, "bannedGames");
     .filter(([name, value]) => value > 0)
     .map(([name, value]) => [name, { value }]);
 
-  addSection("🚫 Blokované hry", filteredGames, "value");
+  addSection("⚠️ Blokované hry", filteredGames, "value", true);
 }
 </script>
