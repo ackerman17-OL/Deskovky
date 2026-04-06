@@ -839,18 +839,20 @@ function updateStats() {
       const hiddenContainer = document.createElement("div");
       hiddenContainer.style.display = "none";
 
-      hidden.forEach(([name, s], i) => {
-        const div = document.createElement("div");
+    hidden.forEach(([name, s], i) => {
+  const div = document.createElement("div");
 
-        div.className = "stat-item";
+  div.className = "stat-item";
 
-        div.innerHTML = `
-          <span>${i + 4}. ${name}</span>
-          <strong>${s[key]}</strong>
-        `;
+  div.innerHTML = `
+    <span>${i + 4}. ${name}</span>
+    <strong title="${gameBanUsers[name] ? gameBanUsers[name].join(", ") : ""}">
+      ${s[key]}
+    </strong>
+  `;
 
-        hiddenContainer.appendChild(div);
-      });
+  hiddenContainer.appendChild(div);
+});
 
       moreBtn.addEventListener("click", () => {
         const open = hiddenContainer.style.display === "block";
