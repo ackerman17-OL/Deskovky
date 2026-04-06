@@ -565,7 +565,7 @@ if (allKnow && hasUnknown) {
 
     <div class="game-reason" style="display:none;">
       <div class="game-tags">
-        ${unknowingPlayers.map(p => `<span class="tag">${p} nezná</span>`).join("")}
+        <span class="tag">nezná: ${unknowingPlayers.join(", ")}</span>
       </div>
     </div>
   `;
