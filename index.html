@@ -867,18 +867,16 @@ function updateStats() {
 
   const entries = Object.entries(stats);
 
-  addSection("🎲 Nejvíc her vlastní", entries, "owns");
-  addSection("👑 Unikátní vlastník", entries, "unique");
-  addSection("😂 Nezná vlastní hry", entries, "ownsButDoesntKnow");
-  addSection("🤡 Nezná nejvíc her", entries, "doesntKnow");
-  addSection("🚫 Nejvíc blokuje (BAN)", entries, "blocks");
-  addSection("💀 Jeho hry jsou nejvíc BANované", entries, "bannedGames");
+ addSection("🎲 Celkem her", entries, "owns");
+addSection("😂 Neumí svoje", entries, "ownsButDoesntKnow");
+addSection("⚠️ Nejvíc blokuje", entries, "blocks");
+addSection("💀 Nejvíc blokovaný", entries, "bannedGames");
 
   // 🔥 BANované hry (jen >0)
   const filteredGames = Object.entries(gameBanStats)
     .filter(([name, value]) => value > 0)
     .map(([name, value]) => [name, { value }]);
 
-  addSection("⚠️ Nejvíc BANované hry", filteredGames, "value");
+  addSection("🚫 Blokované hry", filteredGames, "value");
 }
 </script>
