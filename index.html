@@ -231,7 +231,7 @@ button:active {
 
   <div style="text-align:center; margin-bottom:10px;">
     <button id="btnAll">Všechny hry</button>
-    <button id="btnValid">Vybrané</button>
+    <button id="btnValid">Výběr dle hráčů</button>
     <button id="btnExcluded">Vyřazené</button>
     <button id="btnStats">Statistiky</button>
 
@@ -330,8 +330,9 @@ const games = [
 {name:"Alchymisté", players:[2,3,4],  size:"big", owners:["T"], knows:["M","T"]},
 {name:"Andromeda: Na hranici galaxie", players:[2,3,4], size:"big", owners:["I"], knows: []},
 {name:"Ankh: Bohové Egypta", players:[2,3,4], size:"big", owners:["T"], knows:["B","I","K","M","O","R","T"]},
-{name:"Archa Nova", players:[2,3,4], size:"big", owners:["O","T","I"], knows:["I","K","M","O","R","T"]},
 {name:"Anno 1800", players:[2,3,4], size:"big", owners:["I"], knows: []},
+{name:"Archa Nova", players:[2,3,4], size:"big", owners:["O","T","I"], knows:["I","K","M","O","R","T"]},
+{name:"Armádní generál: Velitel zásobování", players:[6], size:"medium", owners:["O"], knows:[]},
 {name:"Azul: Letohrádek", players:[2,3], size:"medium", owners:["O"], knows:["M","O","T"]},
 {name:"Bestie", players:[2,3,4], size:"big", owners:["I"], knows: []},
 {name:"Běsnění Drákuly", players:[5], size:"big", owners:["O","I"], knows:["I","K","M","O","R","T"]},
@@ -400,7 +401,7 @@ const games = [
 {name:"Království Valerie", players:[2,3,4], size:"small", owners:["I"], knows: ["I","R"]},
 {name:"Krvavý trůn", players:[3,4,5], size:"small", owners:["I"], knows: ["B","I","K","O","R","T"]},
 {name:"Krycí jména", players:[4,6,8], size:"small", owners:["I","T"], knows: ["B","I","K","M","O","R","T"]},
-{name:"Kutná Hora", players:[2,3,4], size:"big", owners:["I"], knows: ["I","M","R","T"]},
+{name:"Kutná Hora", players:[2,3,4], size:"big", owners:["I","T"], knows: ["I","M","R","T"]},
 {name:"La Granja", players:[1,2,3,4], size:"big", owners:["O"], knows:["B","I","K","M","O","R","T"]},
 {name:"Legendy dávnozemě", players:[1,2,3,4], size:"big", owners:["I"], knows: []},
 {name:"Lisboa", players:[2,3,4], size:"big", owners:["T"], knows:["M","T"]},
@@ -409,7 +410,7 @@ const games = [
 {name:"Mars: Teraformace", players:[1,2,3,4], size:"big", owners:["O","T","I"], knows:["B","I","K","M","O","R","T"]},
 {name:"Mars: Teraformace - Expedice Ares", players:[1,2,3,4], size:"medium", owners:["I"], knows: ["I","K","O","R"]},
 {name:"Master of Orion", players:[2,3,4], size:"medium", owners:["O","I"], knows:["K","O","R","T"]},
-{name:"Messina", players:[2,3,4], size:"big", owners:["K"], knows:["I","K","O","R","T"]},
+{name:"Messina", players:[2,3,4], size:"big", owners:["K","T"], knows:["I","K","O","R","T"]},
 {name:"Města", players:[2,3,4], size:"medium", owners:["T"], knows:["M","T"]},
 {name:"Milostný dopis", players:[4], size:"small", owners:["I","O"], knows:["B","I","K","M","O","R","T"]},
 {name:"Mini Express", players:[2,3,4], size:"small", owners:["I"], knows: []},
@@ -650,7 +651,10 @@ document.querySelectorAll("input").forEach(cb => {
 // změna počtu hráčů
 document.getElementById("playerCountSelect")
   .addEventListener("change", updateAllGames);
+
 function updateAllGames() {
+
+document.getElementById("playersCard").style.display = "none";
 
   const list = document.getElementById("allGamesList");
   list.innerHTML = "";
@@ -725,6 +729,8 @@ function updateAllGames() {
 
 function showValid() {
 
+document.getElementById("playersCard").style.display = "block";
+
 document.getElementById("allGamesList").style.display = "none";
 document.getElementById("playerCountFilter").style.display = "none";
 
@@ -746,6 +752,8 @@ btnStats.classList.remove("active");
 }
 
 function showExcluded() {
+
+document.getElementById("playersCard").style.display = "block";
 
 document.getElementById("allGamesList").style.display = "none";
 document.getElementById("playerCountFilter").style.display = "none";
