@@ -201,11 +201,17 @@ button:active {
   text-decoration: underline dotted;
 }
 
+#btnAll.active {
+  background: #4fc3f7;   /* světle modrá */
+  color: black;
+  font-weight: bold;
+}
+
 </style>
 </head>
 <body>
 
-<div class="card">
+<div class="card" id="playersCard">
   <h2>Hráči</h2>
   <div class="players">
 
@@ -224,15 +230,31 @@ button:active {
   <h2>Hry</h2>
 
   <div style="text-align:center; margin-bottom:10px;">
+    <button id="btnAll">Všechny hry</button>
     <button id="btnValid">Vybrané</button>
     <button id="btnExcluded">Vyřazené</button>
     <button id="btnStats">Statistiky</button>
+
   </div>
 
 <div id="sizeFilter" style="margin-bottom:10px;">
   <label><input type="checkbox" value="big" checked> Velké</label>
   <label><input type="checkbox" value="medium"> Střední</label>
   <label><input type="checkbox" value="small"> Malé</label>
+</div>
+
+<div id="playerCountFilter" style="margin-bottom:10px; display:none;">
+  <label>Počet hráčů: </label>
+  <select id="playerCountSelect">
+    <option value="all">Všichni</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7">7</option>
+  </select>
 </div>
 
   <!-- ✅ WRAPPER -->
@@ -248,9 +270,34 @@ button:active {
 
 <ul id="statsList" style="display:none;"></ul>
 
+<ul id="allGamesList" style="display:none;"></ul>
+
 </div>
 
 <script>
+
+btnAll.addEventListener("click", showAllGames);
+
+function showAllGames() {
+
+  currentMode = "all";
+
+  validGames.style.display = "none";
+  excludedGames.style.display = "none";
+  statsList.style.display = "none";
+  allGamesList.style.display = "block";
+
+  document.getElementById("sizeFilter").style.display = "block";
+  document.getElementById("allKnowWrapper").style.display = "none";
+  document.getElementById("playerCountFilter").style.display = "block";
+
+  btnValid.classList.remove("active");
+  btnExcluded.classList.remove("active");
+  btnStats.classList.remove("active");
+  btnAll.classList.add("active");
+
+  updateAllGames();
+}
 
 let currentMode = "games"; // "games" | "stats"
 
@@ -265,7 +312,7 @@ const playersMap = {
 };
 
 const blacklist = {
-  "Ivo": ["Ankh: Bohové Egypta","Blood Rage","Eclipse","Hra o trůny: Desková hra","La Granja","Messina","Přehrada","Scythe","Truhlaříci","Zombicide","Vampire: The Masquerade - Vendeta"],
+  "Ivo": ["Ankh: Bohové Egypta","Blood Rage","Eclipse","Hra o trůny","La Granja","Messina","Přehrada","Scythe","Truhlaříci","Zombicide","Vampire: The Masquerade - Vendeta"],
   "Tacit": ["Brian Boru","Pax Pamir"],
   "Ondřej": ["Small World","Blood Rage","Duna: Imperium","Válka o prsten: Karetní hra","Scythe","Munchkin","Vampire: The Masquerade - Vendeta"],
   "Keťas": ["Small World","Eclipse","Ankh: Bohové Egypta"],
@@ -295,7 +342,7 @@ const games = [
 {name:"Bloodborne", players:[1,2], size:"big", owners:["O"], knows:["O","R"]},
 {name:"Brass: Birmingham", players:[3,4], size:"big", owners:["O","I"], knows:["I","K","M","O","R","T"]},
 {name:"Brass: Lancashire", players:[3,4], size:"big", owners:["I"], knows: []},
-{name:"Brazil: Imperial", players:[2,3,4], size:"big", owners:["T"], knows:["K","O"]},
+{name:"Brazil: Imperieal", players:[2,3,4], size:"big", owners:["T"], knows:["K","O"]},
 {name:"Brian Boru", players:[3,4,5], size:"medium", owners:["I"], knows:["B","I","K","M","R","T"]},
 {name:"Břink! V katakombách", players:[2,3,4,5,6], size:"big", owners:["O","T"], knows:["B","I","K","M","O","R","T"]},
 {name:"Břink! Ve vesmíru", players:[2,3,4], size:"big", owners:["I"], knows: ["B","I","K","M","O","R","T"]},
@@ -316,7 +363,7 @@ const games = [
 {name:"Duna: Imperium", players:[3,4], size:"big", owners:["I"], knows:["I","K","O","R"]},
 {name:"Duna: Válka o Arrakis", players:[2], size:"big", owners:["I"], knows: []},
 {name:"Duna", players:[5,6], size:"big", owners:["I"], knows: []},
-{name:"Eclipse", players:[3,4,5,6], size:"big", owners:["T"], knows:["I","K","O","R","T"]},
+{name:"Eclipse", players:[3,4,5,6], size:"big", owners:["T"], knows:["I","K","M","O","R","T"]},
 {name:"Euthia", players:[1,2,3], size:"big", owners:["O"], knows:["K","O","R","T"]},
 {name:"Ethnos", players:[4,5,6], size:"medium", owners:["O","T"], knows:["B","I","K","M","O","R","T"]},
 {name:"Galaktické aliance", players:[2,3,4], size:"small", owners:["O"], knows:["O"]},
@@ -368,7 +415,7 @@ const games = [
 {name:"Mini Express", players:[2,3,4], size:"small", owners:["I"], knows: []},
 {name:"Moře draků", players:[3,4], size:"small", owners:["I"], knows: []},
 {name:"Mozkožrout", players:[2], size:"small", owners:["I"], knows: ["I","O"]},
-{name:"Munchkin", players:[3,4,5], size:"medium", owners:["I","T"], knows:["B","I","O","R","T"]},
+{name:"Munchkin", players:[3,4,5], size:"big", owners:["I","T"], knows:["B","I","O","R","T"]},
 {name:"Na křídlech", players:[2,3,4], size:"medium", owners:["I"], knows: ["M","K","O","T"]},
 {name:"Naiši", players:[2], size:"small", owners:["I"], knows: []},
 {name:"Nebula", players:[2,3], size:"small", owners:["I"], knows: []},
@@ -387,7 +434,6 @@ const games = [
 {name:"Piráti z Maracaiba", players:[1,2,3,4], size:"medium", owners:["K"], knows:["K","M","O","R","T"]},
 {name:"Podmořská města", players:[1,2,3], size:"big", owners:["K"], knows:["I","K","O","R","T"]},
 {name:"První marťané", players:[1,2], size:"big", owners:["O"], knows:["O"]},
-{name:"Project L", players:[1,2,3,4,5,6], size:"small", owners:["T"], knows:["M","T"]},
 {name:"Přehrada", players:[3,4], size:"big", owners:["O"], knows:["I","K","M","O","R","T"]},
 {name:"Puerto Rico", players:[3,4,5], size:"big", owners:["O","I"], knows:["B","I","K","M","O","R","T"]},
 {name:"Radlands: Gangy pustiny", players:[2], size:"small", owners:["I","O","T"], knows:["I","K","M","O","T"]},
@@ -395,7 +441,6 @@ const games = [
 {name:"Red Dragon Inn", players:[3,4], size:"medium", owners:["I"], knows: ["I","O","R","T"]},
 {name:"Reef", players:[2,3,4], size:"medium", owners:["I"], knows: []},
 {name:"Res Arcana", players:[2,3,4], size:"medium", owners:["I","T"], knows:["K","M","O","R","T"]},
-{name:"Rising Sun", players:[4,5,6], size:"big", owners:["R"], knows:["B","I","K","M","O","R","T"]},
 {name:"Robinson Crusoe", players:[1,2,3], size:"big", owners:["O"], knows:["K","O"]},
 {name:"Root", players:[3,4,5],  size:"big", owners:["T","I"], knows:["I","K","O","R","T"]},
 {name:"RONE", players:[2], size:"medium", owners:["O","K"], knows:["K","O","R"]},
@@ -416,7 +461,7 @@ const games = [
 {name:"Tainted Grail", players:[1,2], size:"big", owners:["K","O","R"], knows:["O","R"]},
 {name:"Tajuplné říše", players:[2,3,4], size:"small", owners:["I","T"], knows:["I","K","M","O","R","T"]},
 {name:"Trickerion", players:[2,3,4], size:"big", owners:["T"], knows:[]},
-{name:"Trosečníci", players:[5,6,7], size:"small", owners:["I"], knows:["B","I","K","O","R","T"]},
+{name:"Trosčníci", players:[5,6,7], size:"small", owners:["I"], knows:["B","I","K","O","R","T"]},
 {name:"Trosečník", players:[1], size:"small", owners:["O"], knows:["O"]},
 {name:"Troyes", players:[2,3,4], size:"big", owners:["T"], knows:[]},
 {name:"Truhlaříci", players:[1,2,3], size:"big", owners:["T"], knows:["I","K","M","R","T"]},
@@ -427,8 +472,7 @@ const games = [
 {name:"Válka v říši divů", players:[3,4,5], size:"medium", owners:["I"], knows:[]},
 {name:"Vampire: The Masquerade - Vendeta", players:[3,4,5], size:"medium", owners:["I"], knows:["I","K","O","R"]},
 {name:"Ve jménu krále", players:[1], size:"small", owners:["O"], knows:["O"]},
-{name:"Vládce Tokia", players:[4,5,6], size:"small", owners:["I"], knows:["I","K","O","R","T"]},
-{name:"Voidfall", players:[1,2,3], size:"big", owners:["O"], knows:["O","R"]},
+{name:"Voidfall", players:[1,2,3], size:"big", owners:["O"], knows:["O","R","T"]},
 {name:"Vysoké napětí", players:[3,4,5,6], size:"big", owners:["I"], knows:[]},
 {name:"Worms: Desková hra", players:[3,4], size:"medium", owners:["I"], knows:[]},
 {name:"XCOM", players:[4], size:"big", owners:["T"], knows:["I","K","M","O","R","T"]},
@@ -442,21 +486,24 @@ const games = [
 
 function update() {
 
-if (currentMode === "stats") {
-  return;
-}
+  validGames.innerHTML = "";
+  excludedGames.innerHTML = "";
 
-if (document.getElementById("statsList").style.display === "block") {
-  document.getElementById("validGames").innerHTML = "";
-  document.getElementById("excludedGames").innerHTML = "";
-  return;
-}
+  if (currentMode === "stats" || currentMode === "all") {
+    return;
+  }
 
- const selectedSizes = [...document.querySelectorAll('#sizeFilter input:checked')]
-  .map(e => e.value);
+  if (document.getElementById("statsList").style.display === "block") {
+    validGames.innerHTML = "";
+    excludedGames.innerHTML = "";
+    return;
+  }
 
-const selected = [...document.querySelectorAll(".players input:checked")]
-  .map(e => e.value);
+  const selectedSizes = [...document.querySelectorAll('#sizeFilter input:checked')]
+    .map(e => e.value);
+
+  const selected = [...document.querySelectorAll(".players input:checked")]
+    .map(e => e.value);
 
   const validList = document.getElementById("validGames");
   const excludedList = document.getElementById("excludedGames");
@@ -464,7 +511,7 @@ const selected = [...document.querySelectorAll(".players input:checked")]
 
   validList.innerHTML = "";
   excludedList.innerHTML = "";
-  statsList.innerHTML = ""; // 🔥 důležité (čistí stats)
+  statsList.innerHTML = "";
 
   const count = selected.length;
   if (count === 0) return;
@@ -475,7 +522,6 @@ const selected = [...document.querySelectorAll(".players input:checked")]
   games.forEach(game => {
 
     if (!selectedSizes.includes(game.size)) return;
-
     if (!game.players.includes(count)) return;
     if (!game.owners.some(o => letters.includes(o))) return;
 
@@ -488,18 +534,17 @@ const selected = [...document.querySelectorAll(".players input:checked")]
       }
     }
 
-if (game.knows && game.knows.length > 0) {
-  for (let player of selected) {
-    let code = playersMap[player];
+    if (game.knows && game.knows.length > 0) {
+      for (let player of selected) {
+        let code = playersMap[player];
 
-    if (!game.knows.includes(code)) {
-      unknowingPlayers.push(player);
+        if (!game.knows.includes(code)) {
+          unknowingPlayers.push(player);
+        }
+      }
+    } else {
+      unknowingPlayers = [...selected];
     }
-  }
-} else {
-  // 👉 nikdo hru nezná
-  unknowingPlayers = [...selected];
-}
 
     const nobodyKnows = unknowingPlayers.length === selected.length && selected.length > 0;
     const hasBan = banPlayers.length > 0;
@@ -507,144 +552,221 @@ if (game.knows && game.knows.length > 0) {
 
     const li = document.createElement("li");
 
-// 🔴 1) BAN nebo nikdo nezná → vždy vyřadit
+    // 🔴 EXCLUDED
+    if (hasBan || nobodyKnows) {
 
-if (hasBan || nobodyKnows) {
+      let reasons = [];
 
-  let reasons = [];
+      if (hasBan) reasons.push("BAN: " + banPlayers.join(", "));
+      if (nobodyKnows) reasons.push("nehrál: nikdo");
 
-  if (hasBan) {
-    reasons.push("BAN: " + banPlayers.join(", "));
-  }
+      if (allKnow && hasUnknown && !nobodyKnows) {
+        reasons.push("nehrál: " + unknowingPlayers.join(", "));
+      }
 
-if (nobodyKnows) {
-  reasons.push("nehrál: nikdo");
-}
+      li.classList.add("excluded");
 
-if (allKnow && hasUnknown && !nobodyKnows) {
-  reasons.push("nehrál: " + unknowingPlayers.join(", "));
-}
-  li.classList.add("excluded");
+      li.innerHTML = `
+        <div class="game-header">
+          <span class="arrow">▶</span>
+          <span>${game.name}</span>
+        </div>
+        <div class="game-reason" style="display:none;">
+          <div class="game-tags">
+            ${reasons.map(r => `<span class="tag">${r}</span>`).join("")}
+          </div>
+        </div>
+      `;
 
-  li.innerHTML = `
-    <div class="game-header">
-      <span class="arrow">▶</span>
-      <span>${game.name}</span>
-    </div>
+      li.querySelector(".game-header").addEventListener("click", () => {
+        const reason = li.querySelector(".game-reason");
+        const arrow = li.querySelector(".arrow");
 
-    <div class="game-reason" style="display:none;">
-      <div class="game-tags">
-        ${reasons.map(r => `<span class="tag">${r}</span>`).join("")}
+        const open = reason.style.display === "block";
+        reason.style.display = open ? "none" : "block";
+        arrow.textContent = open ? "▶" : "▼";
+      });
+
+      excludedList.appendChild(li);
+      return;
+    }
+
+    // 🟡 PARTIAL
+    if (allKnow && hasUnknown) {
+
+      li.classList.add("partial");
+
+      li.innerHTML = `
+        <div class="game-header">
+          <span class="arrow">▶</span>
+          <span>${game.name}</span>
+        </div>
+        <div class="game-reason" style="display:none;">
+          <div class="game-tags">
+            <span class="tag">nehrál: ${unknowingPlayers.join(", ")}</span>
+          </div>
+        </div>
+      `;
+
+      li.querySelector(".game-header").addEventListener("click", () => {
+        const reason = li.querySelector(".game-reason");
+        const arrow = li.querySelector(".arrow");
+
+        const open = reason.style.display === "block";
+        reason.style.display = open ? "none" : "block";
+        arrow.textContent = open ? "▶" : "▼";
+      });
+
+      validList.appendChild(li);
+      return;
+    }
+
+    // 🟢 VALID
+    li.classList.add("valid");
+    li.innerHTML = `
+      <div class="game-header">
+        <span class="arrow"></span>
+        <span>${game.name}</span>
       </div>
-    </div>
-  `;
+    `;
 
-  li.querySelector(".game-header").addEventListener("click", () => {
-    const reason = li.querySelector(".game-reason");
-    const arrow = li.querySelector(".arrow");
+    validList.appendChild(li);
 
-    const open = reason.style.display === "block";
-
-    reason.style.display = open ? "none" : "block";
-    arrow.textContent = open ? "▶" : "▼";
   });
 
-  excludedList.appendChild(li);
-  return;
 }
 
-
-// 🟡 2) někdo nezná (ale ne všichni) → jen když je zapnuté "hráli všichni"
-
-if (allKnow && hasUnknown) {
-
-  li.classList.add("partial");
-
-  li.innerHTML = `
-    <div class="game-header">
-      <span class="arrow">▶</span>
-      <span>${game.name}</span>
-    </div>
-
-    <div class="game-reason" style="display:none;">
-      <div class="game-tags">
-        <span class="tag">nehrál: ${unknowingPlayers.join(", ")}</span>
-      </div>
-    </div>
-  `;
-
-  li.querySelector(".game-header").addEventListener("click", () => {
-    const reason = li.querySelector(".game-reason");
-    const arrow = li.querySelector(".arrow");
-
-    const open = reason.style.display === "block";
-
-    reason.style.display = open ? "none" : "block";
-    arrow.textContent = open ? "▶" : "▼";
-  });
-
-  validList.appendChild(li);
-  return;
-}
-
-
-// 🟢 3) VALID
-li.classList.add("valid");
-
-li.innerHTML = `
-  <div class="game-header">
-    <span class="arrow"></span>
-    <span>${game.name}</span>
-  </div>
-`;
-
-validList.appendChild(li);
-
- });
-
-}
-
+// změna hráčů + size filter
 document.querySelectorAll("input").forEach(cb => {
-  cb.addEventListener("change", update);
+  cb.addEventListener("change", () => {
+    if (currentMode === "all") {
+      updateAllGames();
+    } else {
+      update();
+    }
+  });
 });
 
+// změna počtu hráčů
+document.getElementById("playerCountSelect")
+  .addEventListener("change", updateAllGames);
+function updateAllGames() {
 
-// ❗ JEN JEDNA VERZE showValid
+  const list = document.getElementById("allGamesList");
+  list.innerHTML = "";
+
+  const selectedSizes = [...document.querySelectorAll('#sizeFilter input:checked')]
+    .map(e => e.value);
+
+  const selectedCount = document.getElementById("playerCountSelect").value;
+
+  games.forEach(game => {
+
+    // filtr velikosti
+    if (!selectedSizes.includes(game.size)) return;
+
+    // filtr počtu hráčů
+    if (selectedCount !== "all" && !game.players.includes(Number(selectedCount))) return;
+
+    let banPlayers = [];
+    let unknownPlayers = [];
+
+    Object.keys(playersMap).forEach(player => {
+
+      // BAN
+      if (blacklist[player]?.includes(game.name)) {
+        banPlayers.push(player);
+      }
+
+      // NEZNÁ
+      const code = playersMap[player];
+
+      if (!game.knows?.includes(code)) {
+        unknownPlayers.push(player);
+      }
+
+    });
+
+    const li = document.createElement("li");
+
+    li.innerHTML = `
+      <div class="game-header">
+        <span class="arrow">▶</span>
+        <span>${game.name}</span>
+      </div>
+
+      <div class="game-reason" style="display:none;">
+        <div class="game-tags">
+          <span class="tag">hráči: ${game.players.join(", ")}</span>
+         <span class="tag">vlastní: ${
+  game.owners.map(o => 
+    Object.keys(playersMap).find(p => playersMap[p] === o)
+  ).join(", ")
+}</span>
+          ${banPlayers.length ? `<span class="tag">BAN: ${banPlayers.join(", ")}</span>` : ""}
+          ${unknownPlayers.length ? `<span class="tag">nezná: ${unknownPlayers.join(", ")}</span>` : ""}
+        </div>
+      </div>
+    `;
+
+    li.querySelector(".game-header").addEventListener("click", () => {
+      const detail = li.querySelector(".game-reason");
+      const arrow = li.querySelector(".arrow");
+
+      const open = detail.style.display === "block";
+      detail.style.display = open ? "none" : "block";
+      arrow.textContent = open ? "▶" : "▼";
+    });
+
+    list.appendChild(li);
+
+  });
+}
+
 function showValid() {
 
-document.getElementById("sizeFilter").style.display = "block";
-document.getElementById("allKnowWrapper").style.display = "block";
+document.getElementById("allGamesList").style.display = "none";
+document.getElementById("playerCountFilter").style.display = "none";
+
+  document.getElementById("sizeFilter").style.display = "block";
+  document.getElementById("allKnowWrapper").style.display = "block";
 
   currentMode = "games";
 
   validGames.style.display = "block";
   excludedGames.style.display = "none";
-  statsList.style.display = "none"; // 🔥 schová stats
+  statsList.style.display = "none";
 
-  document.getElementById("allKnowWrapper").style.display = "block";
+ btnValid.classList.add("active");
+btnAll.classList.remove("active");
+btnExcluded.classList.remove("active");
+btnStats.classList.remove("active");
 
-  btnValid.classList.add("active");
-  btnExcluded.classList.remove("active");
-  btnStats.classList.remove("active");
+  update(); // 🔥 DŮLEŽITÉ
 }
 
-// ❗ JEN JEDNA VERZE showExcluded
 function showExcluded() {
 
-document.getElementById("sizeFilter").style.display = "block";
-document.getElementById("allKnowWrapper").style.display = "block";
+document.getElementById("allGamesList").style.display = "none";
+document.getElementById("playerCountFilter").style.display = "none";
+
+  document.getElementById("sizeFilter").style.display = "block";
+  document.getElementById("allKnowWrapper").style.display = "block";
 
   currentMode = "games";
 
   validGames.style.display = "none";
   excludedGames.style.display = "block";
-  statsList.style.display = "none"; // 🔥 schová stats
+  statsList.style.display = "none";
 
   document.getElementById("allKnowWrapper").style.display = "none";
 
-  btnExcluded.classList.add("active");
-  btnValid.classList.remove("active");
-  btnStats.classList.remove("active");
+btnExcluded.classList.add("active");
+btnAll.classList.remove("active");
+btnValid.classList.remove("active");
+btnStats.classList.remove("active");
+
+  update(); // 🔥 DŮLEŽITÉ
 }
 
 btnValid.addEventListener("click", showValid);
@@ -652,6 +774,9 @@ btnExcluded.addEventListener("click", showExcluded);
 btnStats.addEventListener("click", showStats);
 
 function showStats() {
+
+document.getElementById("allGamesList").style.display = "none";
+document.getElementById("playerCountFilter").style.display = "none";
 
 document.getElementById("sizeFilter").style.display = "none";
 document.getElementById("allKnowWrapper").style.display = "none";
@@ -663,15 +788,16 @@ document.getElementById("allKnowWrapper").style.display = "none";
 
   document.getElementById("allKnowWrapper").style.display = "none";
 
-  btnValid.classList.remove("active");
-  btnExcluded.classList.remove("active");
   btnStats.classList.add("active");
+btnAll.classList.remove("active");
+btnValid.classList.remove("active");
+btnExcluded.classList.remove("active");
 
   updateStats();
 }
 
 update();
-showValid();
+showAllGames();
 
 
 // 🔥 STATISTIKY
