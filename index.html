@@ -351,6 +351,12 @@ h2 {
   border-radius: 6px;
 }
 
+#allKnowWrapper button {
+  font-size: 16px;
+  padding: 8px 14px;
+  border-radius: 10px;
+}
+
 </style>
 </head>
 <body>
@@ -362,8 +368,7 @@ h2 {
 
   <div style="text-align:center; margin-bottom:10px;">
     <button id="btnAll">Všechny hry</button>
-    <button id="btnValid">Výběr dle hráčů</button>
-    <button id="btnExcluded">Vyřazené</button>
+    <button id="btnValid">Výběr hráčů</button>
     <button id="btnStats">Statistiky</button>
 
 <div class="card" id="playersCard">
@@ -423,6 +428,7 @@ h2 {
   <!-- ✅ WRAPPER -->
   <div id="allKnowWrapper">
     <button id="btnAllKnow">Hráli všichni</button>
+    <button id="btnExcluded">Vyřazené</button>
   </div>
 
   <ul id="validGames"></ul>
@@ -841,7 +847,11 @@ li.querySelector(".game-header").addEventListener("click", () => {
   arrow.textContent = open ? "▶" : "▼";
 });
 
-validList.appendChild(li);
+if (unknownPlayers.length === 0) {
+  validList.prepend(li);   // hráli všichni nahoru
+} else {
+  validList.appendChild(li); // ostatní dolů
+}
 return;
 
   });
@@ -979,26 +989,32 @@ btnStats.classList.remove("active");
 
 function showExcluded() {
 
-document.getElementById("filtersRow").style.display = "none";
-document.getElementById("playersCard").style.display = "block";
-document.getElementById("allGamesList").style.display = "none";
-document.getElementById("sizeFilter").style.display = "block";
-document.getElementById("allKnowWrapper").style.display = "block";
+allKnow = false;
+btnAllKnow.classList.remove("active");
 
-  currentMode = "games";
+  // TOGGLE logika
+  if (currentMode === "excluded") {
+    showValid();
+    return;
+  }
+
+  document.getElementById("filtersRow").style.display = "none";
+  document.getElementById("playersCard").style.display = "block";
+  document.getElementById("allGamesList").style.display = "none";
+  document.getElementById("sizeFilter").style.display = "block";
+  document.getElementById("allKnowWrapper").style.display = "block";
+
+  currentMode = "excluded";
 
   validGames.style.display = "none";
   excludedGames.style.display = "block";
   statsList.style.display = "none";
 
-  document.getElementById("allKnowWrapper").style.display = "none";
+  btnExcluded.classList.add("active");
+  btnAll.classList.remove("active");
+  btnStats.classList.remove("active");
 
-btnExcluded.classList.add("active");
-btnAll.classList.remove("active");
-btnValid.classList.remove("active");
-btnStats.classList.remove("active");
-
-  update(); // 🔥 DŮLEŽITÉ
+  update();
 }
 
 btnValid.addEventListener("click", showValid);
@@ -1006,11 +1022,22 @@ btnExcluded.addEventListener("click", showExcluded);
 btnStats.addEventListener("click", showStats);
 
 const btnAllKnow = document.getElementById("btnAllKnow");
+btnAllKnow.classList.remove("active");
 
 btnAllKnow.addEventListener("click", () => {
+
+  // zapne / vypne "Hráli všichni"
   allKnow = !allKnow;
 
   btnAllKnow.classList.toggle("active", allKnow);
+
+  // ❗ vypne "Vyřazené"
+  btnExcluded.classList.remove("active");
+
+  // pokud jsi byl ve vyřazených, vrať se zpět
+  if (currentMode === "excluded") {
+    showValid();
+  }
 
   update();
 });
