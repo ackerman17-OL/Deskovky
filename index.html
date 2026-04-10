@@ -318,13 +318,44 @@ button:active {
   }
 }
 
+h2 {
+  font-family: 'Great Vibes', cursive;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: none;
+
+  color: rgba(255,255,255,0.9);
+
+  text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+
+  margin: 10px 0 8px 0;
+  padding: 0;
+
+  background: none;
+  border: none;
+}
+
+#sizeFilter {
+  margin-top: 8px;
+}
+
 </style>
 </head>
 <body>
 
+</div>
+
+<div class="card">
+  <h2>Deskovky</h2>
+
+  <div style="text-align:center; margin-bottom:10px;">
+    <button id="btnAll">Všechny hry</button>
+    <button id="btnValid">Výběr dle hráčů</button>
+    <button id="btnExcluded">Vyřazené</button>
+    <button id="btnStats">Statistiky</button>
+
 <div class="card" id="playersCard">
-  <h2>Hráči</h2>
-  <div class="players">
+    <div class="players">
 
 <label><input type="checkbox" value="Baťa"> Baťa</label>
 <label><input type="checkbox" value="Ivo"> Ivo</label>
@@ -334,17 +365,7 @@ button:active {
 <label><input type="checkbox" value="Ragallach"> Ragallach</label>
 <label><input type="checkbox" value="Tacit"> Tacit</label>
 
-  </div>
 </div>
-
-<div class="card">
-  <h2>Hry</h2>
-
-  <div style="text-align:center; margin-bottom:10px;">
-    <button id="btnAll">Všechny hry</button>
-    <button id="btnValid">Výběr dle hráčů</button>
-    <button id="btnExcluded">Vyřazené</button>
-    <button id="btnStats">Statistiky</button>
 
   </div>
 
@@ -352,6 +373,7 @@ button:active {
   <label><input type="checkbox" value="big" checked> Velké</label>
   <label><input type="checkbox" value="medium"> Střední</label>
   <label><input type="checkbox" value="small"> Malé</label>
+
 </div>
 
 <div id="filtersRow" style="display:none; margin-bottom:10px;">
@@ -400,6 +422,8 @@ button:active {
 <ul id="statsList" style="display:none;"></ul>
 
 <ul id="allGamesList" style="display:none;"></ul>
+
+</div>
 
 </div>
 
