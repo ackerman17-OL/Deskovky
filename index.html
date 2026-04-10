@@ -170,10 +170,15 @@ button:active {
 .stat-item {
   display: flex;
   justify-content: space-between;
-  padding: 10px 14px;
-  margin: 6px 0;
+  padding: 8px 10px;
+  margin: 4px 0;
   border-radius: 10px;
   background: #1e1e1e;
+  font-size: 16px; /* 🔥 přidat */
+}
+
+#statsList {
+  font-size: 16px;
 }
 
 .stat-item.first { background: gold; color: black; }
@@ -708,7 +713,15 @@ document.getElementById("playersCard").style.display = "none";
   ).join(", ")
 }</span>
           ${banPlayers.length ? `<span class="tag">BAN: ${banPlayers.join(", ")}</span>` : ""}
-          ${unknownPlayers.length ? `<span class="tag">nehrál: ${unknownPlayers.join(", ")}</span>` : ""}
+         
+${
+  unknownPlayers.length === Object.keys(playersMap).length
+    ? `<span class="tag">nehrál: nikdo</span>`
+    : unknownPlayers.length
+      ? `<span class="tag">nehrál: ${unknownPlayers.join(", ")}</span>`
+      : ""
+}
+
         </div>
       </div>
     `;
@@ -782,6 +795,8 @@ btnExcluded.addEventListener("click", showExcluded);
 btnStats.addEventListener("click", showStats);
 
 function showStats() {
+
+document.getElementById("playersCard").style.display = "none";
 
 document.getElementById("allGamesList").style.display = "none";
 document.getElementById("playerCountFilter").style.display = "none";
