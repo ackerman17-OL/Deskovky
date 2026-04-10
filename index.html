@@ -339,6 +339,18 @@ h2 {
   margin-top: 8px;
 }
 
+#btnAllKnow.active {
+  background: #4CAF50;  /* stejná zelená */
+  color: white;
+  font-weight: normal;
+}
+
+#btnAllKnow {
+  font-size: 14px;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
 </style>
 </head>
 <body>
@@ -410,10 +422,7 @@ h2 {
 
   <!-- ✅ WRAPPER -->
   <div id="allKnowWrapper">
-    <label style="display:block; font-size:16px; margin-bottom:10px;">
-      <input type="checkbox" id="allKnowToggle">
-      Hráli všichni
-    </label>
+    <button id="btnAllKnow">Hráli všichni</button>
   </div>
 
   <ul id="validGames"></ul>
@@ -452,7 +461,9 @@ function showAllGames() {
   updateAllGames();
 }
 
-let currentMode = "games"; // "games" | "stats"
+let currentMode = "games";
+
+let allKnow = false;
 
 const playersMap = {
   "Baťa":"B",
@@ -672,8 +683,7 @@ function update() {
   if (count === 0) return;
 
   let letters = selected.map(p => playersMap[p]);
-  const allKnow = document.getElementById("allKnowToggle").checked;
-
+  
   games.forEach(game => {
 
     if (!selectedSizes.includes(game.size)) return;
@@ -994,6 +1004,16 @@ btnStats.classList.remove("active");
 btnValid.addEventListener("click", showValid);
 btnExcluded.addEventListener("click", showExcluded);
 btnStats.addEventListener("click", showStats);
+
+const btnAllKnow = document.getElementById("btnAllKnow");
+
+btnAllKnow.addEventListener("click", () => {
+  allKnow = !allKnow;
+
+  btnAllKnow.classList.toggle("active", allKnow);
+
+  update();
+});
 
 function showStats() {
 
