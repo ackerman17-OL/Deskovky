@@ -17,6 +17,34 @@ body {
   padding: 6px;
 }
 
+body {
+  background: url("https://cc.cz/wp-content/uploads/2022/07/euthia-diea-3.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+
+  background:
+    radial-gradient(circle at center, rgba(0,0,0,0.35), rgba(0,0,0,0.85));
+
+  pointer-events: none;
+  z-index: 0;
+}
+
+.card {
+  position: relative;
+  z-index: 1;
+
+  background: rgba(20,20,20,0.78);
+  backdrop-filter: blur(3px);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
 .card {
   background: linear-gradient(145deg, #1c1c1c, #141414);
   border-radius: 16px;
