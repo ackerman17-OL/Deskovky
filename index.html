@@ -302,11 +302,13 @@ button:active {
   color: #fff;
 }
 
-  .players {
+.players {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 6px 12px;
-  text-align: left;
+
+  max-width: 520px;
+  margin: 0 auto;
 }
 
 </style>
