@@ -695,9 +695,9 @@ for (let player of selected) {
 
 let tags = [];
 
-// 1) vlastní
+// 1) majitel
 if (ownsPlayers.length) {
-  tags.push(`vlastní: ${ownsPlayers.join(", ")}`);
+  tags.push(`majitel: ${ownsPlayers.join(", ")}`);
 }
 
 // 2) neumí
@@ -804,7 +804,7 @@ document.getElementById("playersCard").style.display = "none";
       <div class="game-reason" style="display:none;">
         <div class="game-tags">
           <span class="tag">hráči: ${game.players.join(", ")}</span>
-         <span class="tag">vlastní: ${
+         <span class="tag">majitel: ${
   game.owners.map(o => 
     Object.keys(playersMap).find(p => playersMap[p] === o)
   ).join(", ")
