@@ -1286,6 +1286,7 @@ Object.keys(bannedSet).forEach(p => {
   const entries = Object.entries(stats);
 
   addSection("🎲 Celkem her", entries, "owns");
+  addSection("👑 Unikátní hry", entries, "unique");
   addSection("🧠 Umí pravidla", entries, "knows");
   addSection("😂 Neumí svoje", entries, "ownsButDoesntKnow");
   addSection("⚠️ Nejvíc blokuje", entries, "blocks");
