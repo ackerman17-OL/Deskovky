@@ -540,7 +540,7 @@ const games = [
 {name:"Galaktické aliance", players:[2,3,4], size:"small", owners:["O"], knows:["O"]},
 {name:"Gaia Project", players:[1,2,3,4], size:"big", owners:["O","I"], knows:["I","K","M","O","R","T"]},
 {name:"Gloomheaven: Lví chřtán", players:[1,2], size:"big", owners:["O","T"], knows:["K","M","O","T"]},
-{name:"Great Western Trail", players:[2,3], size:"big", owners:["O","T","I"], knows:["B","I","K","M","O","R","T"]},
+{name:"Great Western Trail", players:[2,3,4], size:"big", owners:["O","T","I"], knows:["B","I","K","M","O","R","T"]},
 {name:"Great Western Trail: New Zealand", players:[2,3,4], size:"big", owners:["I"], knows: []},
 {name:"Great Zimbabwe", players:[3,4,5], size:"big", owners:["I"], knows: []},
 {name:"Hannibal & Hamilcar", players:[2], size:"big", owners:["R"], knows:["O","R"]},
@@ -900,6 +900,26 @@ document.getElementById("playerCountSelect")
 document.getElementById("ownerSelect")
   .addEventListener("change", updateAllGames);
 
+function getStar(game) {
+  const allPlayers = Object.values(playersMap);
+
+  // 1) nikdo nesmí mít BAN
+  const hasBan = Object.keys(blacklist).some(player =>
+    blacklist[player]?.includes(game.name)
+  );
+
+  if (hasBan) return "";
+
+  // 2) všichni hráči to musí "znát"
+  const knowsAll = allPlayers.every(code =>
+    game.knows?.includes(code)
+  );
+
+  if (knowsAll) return "⭐ ";
+
+  return "";
+}
+
 function updateAllGames() {
 
 const selectedOwner = document.getElementById("ownerSelect").value;
@@ -946,10 +966,10 @@ document.getElementById("playersCard").style.display = "none";
     const li = document.createElement("li");
 
     li.innerHTML = `
-      <div class="game-header">
-        <span class="arrow">▶</span>
-        <span>${game.name}</span>
-      </div>
+     <div class="game-header">
+  <span class="arrow">▶</span>
+  <span>${game.name}${getStar(game)}</span>
+</div>
 
       <div class="game-reason" style="display:none;">
         <div class="game-tags">
@@ -1116,16 +1136,21 @@ function updateStats() {
   });
 
   const gameBanStats = {};
+  const topCurators = {};
+
+  Object.keys(playersMap).forEach(p => {
+    topCurators[p] = 0;
+  });
 
   games.forEach(game => {
 
-Object.keys(playersMap).forEach(p => {
-  const code = playersMap[p];
+    Object.keys(playersMap).forEach(p => {
+      const code = playersMap[p];
 
-  if (game.knows?.includes(code)) {
-    stats[p].knows++;
-  }
-});
+      if (game.knows?.includes(code)) {
+        stats[p].knows++;
+      }
+    });
 
     if (uniqueGames[game.name]) return;
     uniqueGames[game.name] = true;
@@ -1162,6 +1187,29 @@ Object.keys(playersMap).forEach(p => {
       }
     });
 
+    // =========================
+    // 🏆 TOP CURATORS LOGIKA
+    // =========================
+
+    const isBannedByAnyone = Object.values(blacklist).some(list =>
+      list.includes(game.name)
+    );
+
+    if (!isBannedByAnyone) {
+
+      const allKnow = Object.keys(playersMap).every(p => {
+        const code = playersMap[p];
+        return game.knows?.includes(code);
+      });
+
+      if (allKnow) {
+        game.owners.forEach(o => {
+          const name = Object.keys(playersMap).find(p => playersMap[p] === o);
+          if (name) topCurators[name]++;
+        });
+      }
+    }
+
   });
 
   const bannedSet = {};
@@ -1178,18 +1226,16 @@ Object.keys(playersMap).forEach(p => {
       if (!ownerName) return;
 
       Object.entries(blacklist).forEach(([otherPlayer, list]) => {
-
         if (list.includes(game.name)) {
           bannedSet[ownerName].add(game.name);
         }
-
       });
 
     });
 
   });
 
-Object.keys(bannedSet).forEach(p => {
+  Object.keys(bannedSet).forEach(p => {
     stats[p].bannedGames = bannedSet[p].size;
   });
 
@@ -1286,7 +1332,10 @@ Object.keys(bannedSet).forEach(p => {
   const entries = Object.entries(stats);
 
   addSection("🎲 Celkem her", entries, "owns");
-  addSection("👑 Unikátní hry", entries, "unique");
+  //addSection("🏆 Top hry",
+  //Object.entries(topCurators).map(([name, value]) => [name, { value }]),
+  //"value"
+  //addSection("👑 Unikátní hry", entries, "unique");
   addSection("🧠 Umí pravidla", entries, "knows");
   addSection("😂 Neumí svoje", entries, "ownsButDoesntKnow");
   addSection("⚠️ Nejvíc blokuje", entries, "blocks");
@@ -1297,5 +1346,7 @@ Object.keys(bannedSet).forEach(p => {
     .map(([name, value]) => [name, { value }]);
 
   addSection("⚠️ Blokované hry", filteredGames, "value");
+
+  
 }
 </script>
