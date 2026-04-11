@@ -1106,6 +1106,7 @@ function updateStats() {
     stats[p] = {
       owns: 0,
       unique: 0,
+      knows: 0,
       doesntKnow: 0,
       ownsButDoesntKnow: 0,
       blocks: 0,
@@ -1117,6 +1118,14 @@ function updateStats() {
   const gameBanStats = {};
 
   games.forEach(game => {
+
+Object.keys(playersMap).forEach(p => {
+  const code = playersMap[p];
+
+  if (game.knows?.includes(code)) {
+    stats[p].knows++;
+  }
+});
 
     if (uniqueGames[game.name]) return;
     uniqueGames[game.name] = true;
@@ -1180,7 +1189,7 @@ function updateStats() {
 
   });
 
-  Object.keys(bannedSet).forEach(p => {
+Object.keys(bannedSet).forEach(p => {
     stats[p].bannedGames = bannedSet[p].size;
   });
 
@@ -1277,6 +1286,7 @@ function updateStats() {
   const entries = Object.entries(stats);
 
   addSection("🎲 Celkem her", entries, "owns");
+  addSection("🧠 Umí pravidla", entries, "knows");
   addSection("😂 Neumí svoje", entries, "ownsButDoesntKnow");
   addSection("⚠️ Nejvíc blokuje", entries, "blocks");
   addSection("💀 Nejvíc blokovaný", entries, "bannedGames");
