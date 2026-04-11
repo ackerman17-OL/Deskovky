@@ -690,7 +690,21 @@ function update() {
 
   let letters = selected.map(p => playersMap[p]);
   
-  games.forEach(game => {
+  const sortedGames = [...games].sort((a, b) =>
+  a.name.localeCompare(b.name, "cs", { sensitivity: "base" })
+);
+
+games
+  .filter(game => {
+    if (!selectedSizes.includes(game.size)) return false;
+    if (!game.players.includes(count)) return false;
+    if (!game.owners.some(o => letters.includes(o))) return false;
+    return true;
+  })
+  .sort((a, b) =>
+    a.name.localeCompare(b.name, "cs", { sensitivity: "base" })
+  )
+  .forEach(game => {
 
     if (!selectedSizes.includes(game.size)) return;
     if (!game.players.includes(count)) return;
@@ -852,7 +866,17 @@ if (unknownPlayers.length === 0) {
 } else {
   validList.appendChild(li); // ostatní dolů
 }
-return;
+
+Array.from(validList.children)
+  .sort((a, b) =>
+    a.querySelector(".game-header span:nth-child(2)").textContent
+      .localeCompare(
+        b.querySelector(".game-header span:nth-child(2)").textContent,
+        "cs",
+        { sensitivity: "base" }
+      )
+  )
+  .forEach(el => validList.appendChild(el));
 
   });
 
