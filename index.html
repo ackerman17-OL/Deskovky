@@ -681,7 +681,7 @@ function update() {
   const excludedList = document.getElementById("excludedGames");
   const statsList = document.getElementById("statsList");
 
-  const frag = document.createDocumentFragment();
+  validList.innerHTML = "";
   excludedList.innerHTML = "";
   statsList.innerHTML = "";
 
@@ -802,7 +802,7 @@ games
         arrow.textContent = open ? "▶" : "▼";
       });
 
-      frag.appendChild(li);
+      validList.appendChild(li);
       return;
     }
 
@@ -862,23 +862,23 @@ li.querySelector(".game-header").addEventListener("click", () => {
 });
 
 if (unknownPlayers.length === 0) {
-  frag.appendChild(li);
+  validList.prepend(li);   // hráli všichni nahoru
 } else {
   validList.appendChild(li); // ostatní dolů
 }
 
+Array.from(validList.children)
+  .sort((a, b) =>
+    a.querySelector(".game-header span:nth-child(2)").textContent
+      .localeCompare(
+        b.querySelector(".game-header span:nth-child(2)").textContent,
+        "cs",
+        { sensitivity: "base" }
+      )
+  )
+  .forEach(el => validList.appendChild(el));
+
   });
-
-  const sorted = Array.from(validList.children).sort((a, b) =>
-  a.querySelector(".game-header span:nth-child(2)").textContent
-    .localeCompare(
-      b.querySelector(".game-header span:nth-child(2)").textContent,
-      "cs",
-      { sensitivity: "base" }
-    )
-);
-
-validList.replaceChildren(...sorted);
 
 }
 
@@ -1109,6 +1109,7 @@ btnExcluded.classList.remove("active");
   updateStats();
 }
 
+update();
 showAllGames();
 
 
