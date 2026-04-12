@@ -357,15 +357,6 @@ h2 {
   border-radius: 10px;
 }
 
-#validGames, #excludedGames, #statsList, #allGamesList {
-  contain: layout paint;
-  will-change: transform;
-}
-
-body {
-  overflow-anchor: none;
-}
-
 </style>
 </head>
 <body>
@@ -457,26 +448,28 @@ btnAll.addEventListener("click", showAllGames);
 
 function showAllGames() {
 
-  requestAnimationFrame(() => {
+requestAnimationFrame(() => {
 
-    currentMode = "all";
+  currentMode = "all";
 
-    validGames.style.display = "none";
-    excludedGames.style.display = "none";
-    statsList.style.display = "none";
-    allGamesList.style.display = "block";
+  validGames.style.display = "none";
+  excludedGames.style.display = "none";
+  statsList.style.display = "none";
+  allGamesList.style.display = "block";
 
-    document.getElementById("sizeFilter").style.display = "block";
-    document.getElementById("allKnowWrapper").style.display = "none";
-    document.getElementById("filtersRow").style.display = "block";
+  document.getElementById("sizeFilter").style.display = "block";
+  document.getElementById("allKnowWrapper").style.display = "none";
+  document.getElementById("filtersRow").style.display = "block";
 
-    btnValid.classList.remove("active");
-    btnExcluded.classList.remove("active");
-    btnStats.classList.remove("active");
-    btnAll.classList.add("active");
+  btnValid.classList.remove("active");
+  btnExcluded.classList.remove("active");
+  btnStats.classList.remove("active");
+  btnAll.classList.add("active");
 
-    updateAllGames();
-  });
+  updateAllGames();
+
+});
+
 }
 
 let currentMode = "games";
@@ -1021,84 +1014,115 @@ ${
 
 function showValid() {
 
-  requestAnimationFrame(() => {
+requestAnimationFrame(() => {
 
-    document.getElementById("filtersRow").style.display = "none";
-    document.getElementById("playersCard").style.display = "block";
-    document.getElementById("allGamesList").style.display = "none";
-    document.getElementById("sizeFilter").style.display = "block";
-    document.getElementById("allKnowWrapper").style.display = "block";
+document.getElementById("filtersRow").style.display = "none";
 
-    currentMode = "games";
+document.getElementById("playersCard").style.display = "block";
+document.getElementById("allGamesList").style.display = "none";
+document.getElementById("sizeFilter").style.display = "block";
+document.getElementById("allKnowWrapper").style.display = "block";
 
-    validGames.style.display = "block";
-    excludedGames.style.display = "none";
-    statsList.style.display = "none";
 
-    btnValid.classList.add("active");
-    btnAll.classList.remove("active");
-    btnExcluded.classList.remove("active");
-    btnStats.classList.remove("active");
+  currentMode = "games";
 
-    update();
-  });
+  validGames.style.display = "block";
+  excludedGames.style.display = "none";
+  statsList.style.display = "none";
+
+ btnValid.classList.add("active");
+btnAll.classList.remove("active");
+btnExcluded.classList.remove("active");
+btnStats.classList.remove("active");
+
+  update(); // 🔥 DŮLEŽITÉ
+});
+
 }
 
 function showExcluded() {
 
-  requestAnimationFrame(() => {
+allKnow = false;
+btnAllKnow.classList.remove("active");
 
-    allKnow = false;
-    btnAllKnow.classList.remove("active");
+  // TOGGLE logika
+  if (currentMode === "excluded") {
+    showValid();
+    return;
+  }
 
-    if (currentMode === "excluded") {
-      showValid();
-      return;
-    }
+  document.getElementById("filtersRow").style.display = "none";
+  document.getElementById("playersCard").style.display = "block";
+  document.getElementById("allGamesList").style.display = "none";
+  document.getElementById("sizeFilter").style.display = "block";
+  document.getElementById("allKnowWrapper").style.display = "block";
 
-    document.getElementById("filtersRow").style.display = "none";
-    document.getElementById("playersCard").style.display = "block";
-    document.getElementById("allGamesList").style.display = "none";
-    document.getElementById("sizeFilter").style.display = "block";
-    document.getElementById("allKnowWrapper").style.display = "block";
+  currentMode = "excluded";
 
-    currentMode = "excluded";
+  validGames.style.display = "none";
+  excludedGames.style.display = "block";
+  statsList.style.display = "none";
 
-    validGames.style.display = "none";
-    excludedGames.style.display = "block";
-    statsList.style.display = "none";
+  btnExcluded.classList.add("active");
+  btnAll.classList.remove("active");
+  btnStats.classList.remove("active");
 
-    btnExcluded.classList.add("active");
-    btnAll.classList.remove("active");
-    btnStats.classList.remove("active");
-
-    update();
-  });
+  update();
 }
+
+btnValid.addEventListener("click", showValid);
+btnExcluded.addEventListener("click", showExcluded);
+btnStats.addEventListener("click", showStats);
+
+const btnAllKnow = document.getElementById("btnAllKnow");
+btnAllKnow.classList.remove("active");
+
+btnAllKnow.addEventListener("click", () => {
+
+  // zapne / vypne "Hráli všichni"
+  allKnow = !allKnow;
+
+  btnAllKnow.classList.toggle("active", allKnow);
+
+  // ❗ vypne "Vyřazené"
+  btnExcluded.classList.remove("active");
+
+  // pokud jsi byl ve vyřazených, vrať se zpět
+  if (currentMode === "excluded") {
+    showValid();
+  }
+
+  update();
+});
+
 function showStats() {
 
-  requestAnimationFrame(() => {
+requestAnimationFrame(() => {
 
-    document.getElementById("filtersRow").style.display = "none";
-    document.getElementById("playersCard").style.display = "none";
-    document.getElementById("allGamesList").style.display = "none";
-    document.getElementById("sizeFilter").style.display = "none";
-    document.getElementById("allKnowWrapper").style.display = "none";
+document.getElementById("filtersRow").style.display = "none";
+document.getElementById("playersCard").style.display = "none";
+document.getElementById("allGamesList").style.display = "none";
+document.getElementById("sizeFilter").style.display = "none";
+document.getElementById("allKnowWrapper").style.display = "none";
 
-    currentMode = "stats";
+  currentMode = "stats";
+  validGames.style.display = "none";
+  excludedGames.style.display = "none";
+  statsList.style.display = "block";
 
-    validGames.style.display = "none";
-    excludedGames.style.display = "none";
-    statsList.style.display = "block";
+  document.getElementById("allKnowWrapper").style.display = "none";
 
-    btnStats.classList.add("active");
-    btnAll.classList.remove("active");
-    btnValid.classList.remove("active");
-    btnExcluded.classList.remove("active");
+  btnStats.classList.add("active");
+btnAll.classList.remove("active");
+btnValid.classList.remove("active");
+btnExcluded.classList.remove("active");
 
-    updateStats();
-  });
+  updateStats();
+
+});
+
 }
+
 update();
 showAllGames();
 
