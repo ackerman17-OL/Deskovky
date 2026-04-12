@@ -1096,25 +1096,32 @@ btnAllKnow.addEventListener("click", () => {
 
 function showStats() {
 
-document.getElementById("filtersRow").style.display = "none";
-document.getElementById("playersCard").style.display = "none";
-document.getElementById("allGamesList").style.display = "none";
-document.getElementById("sizeFilter").style.display = "none";
-document.getElementById("allKnowWrapper").style.display = "none";
-
-  currentMode = "stats";
-  validGames.style.display = "none";
-  excludedGames.style.display = "none";
-  statsList.style.display = "block";
-
+  document.getElementById("filtersRow").style.display = "none";
+  document.getElementById("playersCard").style.display = "none";
+  document.getElementById("allGamesList").style.display = "none";
+  document.getElementById("sizeFilter").style.display = "none";
   document.getElementById("allKnowWrapper").style.display = "none";
 
-  btnStats.classList.add("active");
-btnAll.classList.remove("active");
-btnValid.classList.remove("active");
-btnExcluded.classList.remove("active");
+  currentMode = "stats";
 
+  validGames.style.display = "none";
+  excludedGames.style.display = "none";
+
+  // ❗ schovej před renderem
+  statsList.style.display = "none";
+
+  btnStats.classList.add("active");
+  btnAll.classList.remove("active");
+  btnValid.classList.remove("active");
+  btnExcluded.classList.remove("active");
+
+  // ❗ naplnit DOM
   updateStats();
+
+  // ❗ zobrazit až po renderu
+  requestAnimationFrame(() => {
+    statsList.style.display = "block";
+  });
 }
 
 update();
