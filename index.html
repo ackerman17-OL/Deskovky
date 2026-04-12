@@ -448,6 +448,8 @@ btnAll.addEventListener("click", showAllGames);
 
 function showAllGames() {
 
+requestAnimationFrame(() => {
+
   currentMode = "all";
 
   validGames.style.display = "none";
@@ -465,6 +467,9 @@ function showAllGames() {
   btnAll.classList.add("active");
 
   updateAllGames();
+
+});
+
 }
 
 let currentMode = "games";
@@ -1009,6 +1014,8 @@ ${
 
 function showValid() {
 
+requestAnimationFrame(() => {
+
 document.getElementById("filtersRow").style.display = "none";
 
 document.getElementById("playersCard").style.display = "block";
@@ -1029,6 +1036,8 @@ btnExcluded.classList.remove("active");
 btnStats.classList.remove("active");
 
   update(); // 🔥 DŮLEŽITÉ
+});
+
 }
 
 function showExcluded() {
@@ -1088,6 +1097,8 @@ btnAllKnow.addEventListener("click", () => {
 
 function showStats() {
 
+requestAnimationFrame(() => {
+
 document.getElementById("filtersRow").style.display = "none";
 document.getElementById("playersCard").style.display = "none";
 document.getElementById("allGamesList").style.display = "none";
@@ -1107,6 +1118,9 @@ btnValid.classList.remove("active");
 btnExcluded.classList.remove("active");
 
   updateStats();
+
+});
+
 }
 
 update();
