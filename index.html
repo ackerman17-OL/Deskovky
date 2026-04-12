@@ -448,8 +448,6 @@ btnAll.addEventListener("click", showAllGames);
 
 function showAllGames() {
 
-requestAnimationFrame(() => {
-
   currentMode = "all";
 
   validGames.style.display = "none";
@@ -467,9 +465,6 @@ requestAnimationFrame(() => {
   btnAll.classList.add("active");
 
   updateAllGames();
-
-});
-
 }
 
 let currentMode = "games";
@@ -1014,8 +1009,6 @@ ${
 
 function showValid() {
 
-requestAnimationFrame(() => {
-
 document.getElementById("filtersRow").style.display = "none";
 
 document.getElementById("playersCard").style.display = "block";
@@ -1036,22 +1029,19 @@ btnExcluded.classList.remove("active");
 btnStats.classList.remove("active");
 
   update(); // 🔥 DŮLEŽITÉ
-});
-
 }
 
 function showExcluded() {
 
-  allKnow = false;
-  btnAllKnow.classList.remove("active");
+allKnow = false;
+btnAllKnow.classList.remove("active");
 
-  // TOGGLE logika (NEZMĚNĚNO)
+  // TOGGLE logika
   if (currentMode === "excluded") {
     showValid();
     return;
   }
 
-  // UI state (NEZMĚNĚNO)
   document.getElementById("filtersRow").style.display = "none";
   document.getElementById("playersCard").style.display = "block";
   document.getElementById("allGamesList").style.display = "none";
@@ -1068,17 +1058,35 @@ function showExcluded() {
   btnAll.classList.remove("active");
   btnStats.classList.remove("active");
 
-  // 🔥 KLÍČ: oddělení renderu od DOM swapu
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      update();
-    });
-  });
+  update();
 }
 
-function showStats() {
+btnValid.addEventListener("click", showValid);
+btnExcluded.addEventListener("click", showExcluded);
+btnStats.addEventListener("click", showStats);
 
-requestAnimationFrame(() => {
+const btnAllKnow = document.getElementById("btnAllKnow");
+btnAllKnow.classList.remove("active");
+
+btnAllKnow.addEventListener("click", () => {
+
+  // zapne / vypne "Hráli všichni"
+  allKnow = !allKnow;
+
+  btnAllKnow.classList.toggle("active", allKnow);
+
+  // ❗ vypne "Vyřazené"
+  btnExcluded.classList.remove("active");
+
+  // pokud jsi byl ve vyřazených, vrať se zpět
+  if (currentMode === "excluded") {
+    showValid();
+  }
+
+  update();
+});
+
+function showStats() {
 
 document.getElementById("filtersRow").style.display = "none";
 document.getElementById("playersCard").style.display = "none";
@@ -1099,9 +1107,6 @@ btnValid.classList.remove("active");
 btnExcluded.classList.remove("active");
 
   updateStats();
-
-});
-
 }
 
 update();
