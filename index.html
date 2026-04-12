@@ -867,17 +867,6 @@ if (unknownPlayers.length === 0) {
   validList.appendChild(li); // ostatní dolů
 }
 
-Array.from(validList.children)
-  .sort((a, b) =>
-    a.querySelector(".game-header span:nth-child(2)").textContent
-      .localeCompare(
-        b.querySelector(".game-header span:nth-child(2)").textContent,
-        "cs",
-        { sensitivity: "base" }
-      )
-  )
-  .forEach(el => validList.appendChild(el));
-
   });
 
 }
