@@ -453,7 +453,9 @@ function showAllGames() {
   validGames.style.display = "none";
   excludedGames.style.display = "none";
   statsList.style.display = "none";
-  allGamesList.style.display = "block";
+
+  // ❗ nejdřív schovej UI, ať nebliká
+  allGamesList.style.display = "none";
 
   document.getElementById("sizeFilter").style.display = "block";
   document.getElementById("allKnowWrapper").style.display = "none";
@@ -464,7 +466,13 @@ function showAllGames() {
   btnStats.classList.remove("active");
   btnAll.classList.add("active");
 
+  // ❗ nejdřív naplnit
   updateAllGames();
+
+  // ❗ až potom zobrazit (KLÍČ FIX)
+  requestAnimationFrame(() => {
+    allGamesList.style.display = "block";
+  });
 }
 
 let currentMode = "games";
