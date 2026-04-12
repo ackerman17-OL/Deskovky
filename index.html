@@ -681,7 +681,7 @@ function update() {
   const excludedList = document.getElementById("excludedGames");
   const statsList = document.getElementById("statsList");
 
-  validList.innerHTML = "";
+  const frag = document.createDocumentFragment();
   excludedList.innerHTML = "";
   statsList.innerHTML = "";
 
@@ -802,7 +802,7 @@ games
         arrow.textContent = open ? "▶" : "▼";
       });
 
-      validList.appendChild(li);
+      frag.appendChild(li);
       return;
     }
 
@@ -862,12 +862,23 @@ li.querySelector(".game-header").addEventListener("click", () => {
 });
 
 if (unknownPlayers.length === 0) {
-  validList.prepend(li);   // hráli všichni nahoru
+  frag.appendChild(li);
 } else {
   validList.appendChild(li); // ostatní dolů
 }
 
   });
+
+  const sorted = Array.from(validList.children).sort((a, b) =>
+  a.querySelector(".game-header span:nth-child(2)").textContent
+    .localeCompare(
+      b.querySelector(".game-header span:nth-child(2)").textContent,
+      "cs",
+      { sensitivity: "base" }
+    )
+);
+
+validList.replaceChildren(...sorted);
 
 }
 
