@@ -1131,12 +1131,16 @@ function updateStats() {
       ownsButDoesntKnow: 0,
       blocks: 0,
       bannedGames: 0,
-      duplicates: 0
+      duplicates: 0,
+      duplicateGamesUnique: 0,
     };
   });
 
   const gameBanStats = {};
   const topCurators = {};
+
+  // 👇 PŘIDÁNO
+  const groupStats = {};
 
   Object.keys(playersMap).forEach(p => {
     topCurators[p] = 0;
@@ -1210,6 +1214,45 @@ function updateStats() {
       }
     }
 
+    // ==================================================
+    // 👥 SKUPINY VLASTNÍKŮ (VŠECHNY KOMBINACE 2+)
+    // ==================================================
+
+    function getSubsets(arr) {
+      const result = [];
+      const n = arr.length;
+      const total = 1 << n;
+
+      for (let mask = 1; mask < total; mask++) {
+        const subset = [];
+
+        for (let i = 0; i < n; i++) {
+          if (mask & (1 << i)) subset.push(arr[i]);
+        }
+
+        if (subset.length >= 2) {
+          result.push(subset);
+        }
+      }
+
+      return result;
+    }
+
+   // 👥 SKUPINY – pouze přesná kombinace vlastníků
+if (game.owners.length >= 2) {
+
+  const key = [...game.owners]
+    .map(o => Object.keys(playersMap).find(p => playersMap[p] === o))
+    .filter(Boolean)
+    .sort()
+    .join(" + ");
+
+  if (!groupStats[key]) {
+    groupStats[key] = 0;
+  }
+
+  groupStats[key]++;
+}
   });
 
   const bannedSet = {};
@@ -1253,7 +1296,25 @@ function updateStats() {
       });
     }
 
+if (game.owners.length > 1) {
+  const uniqueOwners = [...new Set(game.owners)];
+
+  uniqueOwners.forEach(o => {
+    const name = Object.keys(playersMap).find(p => playersMap[p] === o);
+
+    if (name) {
+      stats[name].duplicateGamesUnique++;
+    }
   });
+}
+
+  });
+
+const duplicateGames = games.filter(g => g.owners.length > 1);
+
+const duplicateEntries = duplicateGames.map(g => {
+  return [g.name, { value: g.owners.length }];
+});
 
   Object.entries(blacklist).forEach(([player, list]) => {
     if (stats[player]) {
@@ -1262,7 +1323,7 @@ function updateStats() {
   });
 
   // 🏆 VÝPIS
-  function addSection(title, arr, key) {
+  function addSection(title, arr, key, useX = false) {
 
     const h = document.createElement("li");
     h.innerHTML = `<strong>${title}</strong>`;
@@ -1284,9 +1345,9 @@ function updateStats() {
       if (i === 2) div.classList.add("third");
 
       div.innerHTML = `
-        <span>${i + 1}. ${name}</span>
-        <strong>${s[key]}</strong>
-      `;
+  <span>${i + 1}. ${name}</span>
+  <strong>${useX ? "x" : ""}${s[key]}</strong>
+`;
 
       container.appendChild(div);
     });
@@ -1331,22 +1392,29 @@ function updateStats() {
 
   const entries = Object.entries(stats);
 
-  addSection("🎲 Celkem her", entries, "owns");
-  //addSection("🏆 Top hry",
+  addSection("🎲 Počet her", entries, "owns");
+  addSection("👑 Unikátní hry", entries, "unique");
+  addSection("👥 Duplicitní hry", entries, "duplicateGamesUnique");
+//addSection("🏆 Top hry",
   //Object.entries(topCurators).map(([name, value]) => [name, { value }]),
   //"value"
-  //addSection("👑 Unikátní hry", entries, "unique");
-  addSection("🧠 Umí pravidla", entries, "knows");
-  addSection("😂 Neumí svoje", entries, "ownsButDoesntKnow");
+ const groupEntries = Object.entries(groupStats)
+  .map(([key, value]) => [key, { value }])
+  .sort((a, b) => b[1].value - a[1].value);
+  addSection("🧑‍🤝‍🧑 Duplicitní hry - skupiny", groupEntries, "value");
+  
+  addSection("🧠 Znalost pravidel", entries, "knows");
+  addSection("🙈 Neznalost vlastních her", entries, "ownsButDoesntKnow");
   addSection("⚠️ Nejvíc blokuje", entries, "blocks");
   addSection("💀 Nejvíc blokovaný", entries, "bannedGames");
 
-  const filteredGames = Object.entries(gameBanStats)
+  addSection("🔁 Duplicitní tituly", duplicateEntries, "value", true);
+ const filteredGames = Object.entries(gameBanStats)
     .filter(([name, value]) => value > 0)
     .map(([name, value]) => [name, { value }]);
 
-  addSection("⚠️ Blokované hry", filteredGames, "value");
+  addSection("🔒 Blokované tituly", filteredGames, "value", true);
 
-  
-}
+ }
+
 </script>
