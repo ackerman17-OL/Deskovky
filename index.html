@@ -1042,15 +1042,16 @@ btnStats.classList.remove("active");
 
 function showExcluded() {
 
-allKnow = false;
-btnAllKnow.classList.remove("active");
+  allKnow = false;
+  btnAllKnow.classList.remove("active");
 
-  // TOGGLE logika
+  // TOGGLE logika (NEZMĚNĚNO)
   if (currentMode === "excluded") {
     showValid();
     return;
   }
 
+  // UI state (NEZMĚNĚNO)
   document.getElementById("filtersRow").style.display = "none";
   document.getElementById("playersCard").style.display = "block";
   document.getElementById("allGamesList").style.display = "none";
@@ -1067,33 +1068,13 @@ btnAllKnow.classList.remove("active");
   btnAll.classList.remove("active");
   btnStats.classList.remove("active");
 
-  update();
+  // 🔥 KLÍČ: oddělení renderu od DOM swapu
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      update();
+    });
+  });
 }
-
-btnValid.addEventListener("click", showValid);
-btnExcluded.addEventListener("click", showExcluded);
-btnStats.addEventListener("click", showStats);
-
-const btnAllKnow = document.getElementById("btnAllKnow");
-btnAllKnow.classList.remove("active");
-
-btnAllKnow.addEventListener("click", () => {
-
-  // zapne / vypne "Hráli všichni"
-  allKnow = !allKnow;
-
-  btnAllKnow.classList.toggle("active", allKnow);
-
-  // ❗ vypne "Vyřazené"
-  btnExcluded.classList.remove("active");
-
-  // pokud jsi byl ve vyřazených, vrať se zpět
-  if (currentMode === "excluded") {
-    showValid();
-  }
-
-  update();
-});
 
 function showStats() {
 
