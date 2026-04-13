@@ -32,7 +32,11 @@ body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle at center, rgba(0,0,0,0.35), rgba(0,0,0,0.85));
+  background: radial-gradient(
+    circle at center,
+    rgba(0,0,0,0.15),
+    rgba(0,0,0,0.55)
+  );
   pointer-events: none;
   z-index: 0;
 }
@@ -57,16 +61,17 @@ body::before {
   margin: 10px auto;
   padding: 12px;
 
-  background: linear-gradient(145deg, #1c1c1c, #141414);
+ background: rgba(20, 20, 20, 0.55);
   border-radius: 16px;
 
-  border: 1px solid rgba(255,255,255,0.25);
+  border: 1px solid rgba(255,255,255,0.12);
 
   box-shadow:
     0 4px 10px rgba(0,0,0,0.5),
     inset 0 1px 1px rgba(255,255,255,0.05);
 
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(10px);
+-webkit-backdrop-filter: blur(10px);
 }
 
 /* top bar specifika */
@@ -418,17 +423,14 @@ button:active {
 
 </div>
 
-<div class="card">
-<div id="topBar">
+<div id="topBar" class="card">
   <h2>Deskovky</h2>
 
   <div class="topButtons">
     <button id="btnAll">Všechny hry</button>
     <button id="btnValid">Výběr hráčů</button>
     <button id="btnStats">Statistiky</button>
-
-</div>
-
+  </div>
 </div>
 
 <div class="card" id="playersCard">
@@ -445,6 +447,7 @@ button:active {
 </div>
 
   </div>
+<div class="card" id="filtersCard">
 
 <div id="sizeFilter" style="margin-bottom:10px;">
   <label><input type="checkbox" value="big" checked> Velké</label>
@@ -501,6 +504,9 @@ button:active {
 </div>
 
 </div>
+
+
+  </div>
 
 <script>
 
