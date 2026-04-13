@@ -1415,8 +1415,9 @@ const duplicateEntries = duplicateGames.map(g => {
       moreBtn.innerHTML = "▼ zobrazit více";
       moreBtn.style.cursor = "pointer";
       moreBtn.style.textAlign = "center";
-      moreBtn.style.margin = "8px";
-      moreBtn.style.color = "#ffcc00";
+      moreBtn.style.fontSize = "15px";
+      moreBtn.style.margin = "5px";
+      moreBtn.style.opacity = "0.9";
 
       const hiddenContainer = document.createElement("div");
       hiddenContainer.style.display = "none";
@@ -1452,9 +1453,9 @@ const duplicateEntries = duplicateGames.map(g => {
   addSection("🎲 Počet her", entries, "owns");
   addSection("👑 Unikátní hry", entries, "unique");
   addSection("👥 Duplicitní hry", entries, "duplicateGamesUnique");
-//addSection("🏆 Top hry",
+  //addSection("🏆 Top hry",
   //Object.entries(topCurators).map(([name, value]) => [name, { value }]),
-  //"value"
+  //"value");
  const groupEntries = Object.entries(groupStats)
   .map(([key, value]) => [key, { value }])
   .sort((a, b) => b[1].value - a[1].value);
@@ -1465,12 +1466,12 @@ const duplicateEntries = duplicateGames.map(g => {
   addSection("⚠️ Nejvíc blokuje", entries, "blocks");
   addSection("💀 Nejvíc blokovaný", entries, "bannedGames");
 
-  addSection("🔁 Duplicitní tituly", duplicateEntries, "value", true);
+  addSection("🔁 Duplicitní tituly", duplicateEntries, "value");
  const filteredGames = Object.entries(gameBanStats)
     .filter(([name, value]) => value > 0)
     .map(([name, value]) => [name, { value }]);
 
-  addSection("🔒 Blokované tituly", filteredGames, "value", true);
+  addSection("🔒 Blokované tituly", filteredGames, "value");
 
  }
 
