@@ -357,20 +357,6 @@ h2 {
   border-radius: 10px;
 }
 
-  #validGames,
-#excludedGames,
-#statsList,
-#allGamesList {
-  min-height: 300px;
-}
-
-  #allKnowWrapper {
-  display: flex;
-  justify-content: center;
-  gap: 6px;
-  flex-wrap: wrap; /* 🔥 klíč na mobil */
-}
-
 </style>
 </head>
 <body>
@@ -380,11 +366,10 @@ h2 {
 <div class="card">
   <h2>Deskovky</h2>
 
-  <div class="buttons">
+  <div style="text-align:center; margin-bottom:10px;">
     <button id="btnAll">Všechny hry</button>
     <button id="btnValid">Výběr hráčů</button>
     <button id="btnStats">Statistiky</button>
-    </div>
 
 <div class="card" id="playersCard">
     <div class="players">
@@ -468,12 +453,10 @@ function showAllGames() {
   validGames.style.display = "none";
   excludedGames.style.display = "none";
   statsList.style.display = "none";
-  setTimeout(() => {
   allGamesList.style.display = "block";
-}, 10);  
 
   document.getElementById("sizeFilter").style.display = "block";
- .style.display = "block"
+  document.getElementById("allKnowWrapper").style.display = "none";
   document.getElementById("filtersRow").style.display = "block";
 
   btnValid.classList.remove("active");
@@ -1031,7 +1014,7 @@ document.getElementById("filtersRow").style.display = "none";
 document.getElementById("playersCard").style.display = "block";
 document.getElementById("allGamesList").style.display = "none";
 document.getElementById("sizeFilter").style.display = "block";
-.style.display = "flex"
+document.getElementById("allKnowWrapper").style.display = "block";
 
 
   currentMode = "games";
@@ -1063,7 +1046,7 @@ btnAllKnow.classList.remove("active");
   document.getElementById("playersCard").style.display = "block";
   document.getElementById("allGamesList").style.display = "none";
   document.getElementById("sizeFilter").style.display = "block";
-  .style.display = "flex"
+  document.getElementById("allKnowWrapper").style.display = "block";
 
   currentMode = "excluded";
 
@@ -1109,15 +1092,14 @@ document.getElementById("filtersRow").style.display = "none";
 document.getElementById("playersCard").style.display = "none";
 document.getElementById("allGamesList").style.display = "none";
 document.getElementById("sizeFilter").style.display = "none";
-.style.display = "block"
+document.getElementById("allKnowWrapper").style.display = "none";
+
   currentMode = "stats";
   validGames.style.display = "none";
   excludedGames.style.display = "none";
-  setTimeout(() => {
   statsList.style.display = "block";
-}, 10);
 
-  .style.display = "block"
+  document.getElementById("allKnowWrapper").style.display = "none";
 
   btnStats.classList.add("active");
 btnAll.classList.remove("active");
