@@ -332,6 +332,41 @@ button:active {
   font-size: 14px;
 }
 
+#btnAllKnow.active {
+  background: #4CAF50;
+  color: white;
+  font-weight: normal;
+}
+
+#btnAllKnow {
+  font-size: 16px;
+  padding: 8px 14px;
+  margin: 3px;
+  border-radius: 10px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .topButtons {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    gap: 6px;
+  }
+
+  .topButtons button {
+    flex: 1;              /* všechny stejně široké */
+    font-size: 14px;      /* trochu menší text */
+    padding: 8px 6px;     /* kompaktnější */
+  }
+}
+
 </style>
 </head>
 <body>
