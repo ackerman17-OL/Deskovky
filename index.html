@@ -7,6 +7,11 @@
 <title>Deskovky</title>
 
 <style>
+
+body {
+  overflow-anchor: none;
+}
+
 body {
   font-family: Arial, sans-serif;
   background: #121212;
@@ -57,6 +62,17 @@ body::before {
     inset 0 1px 1px rgba(255,255,255,0.05);
 
   border: 1px solid rgba(255,255,255,0.25);
+}
+
+#topBar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  background: rgba(18,18,18,0.92);
+  backdrop-filter: blur(8px);
+
+  padding: 10px 0;
 }
 
 /* nadpisy */
@@ -173,6 +189,9 @@ button {
   color: #fff;
 
   transition: all 0.2s ease;
+
+  display: inline-flex;   /* 🔴 PŘIDAT */
+  white-space: nowrap;    /* 🔴 PŘIDAT */
 }
 
 button:hover {
@@ -357,6 +376,18 @@ h2 {
   border-radius: 10px;
 }
 
+.topButtons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.hidden {
+  display: none !important;
+}
+
 </style>
 </head>
 <body>
@@ -364,12 +395,15 @@ h2 {
 </div>
 
 <div class="card">
+<div id="topBar">
   <h2>Deskovky</h2>
 
-  <div style="text-align:center; margin-bottom:10px;">
+  <div class="topButtons">
     <button id="btnAll">Všechny hry</button>
     <button id="btnValid">Výběr hráčů</button>
     <button id="btnStats">Statistiky</button>
+
+</div>
 
 </div>
 
@@ -457,9 +491,9 @@ function showAllGames() {
   statsList.style.display = "none";
   allGamesList.style.display = "block";
 
-  document.getElementById("sizeFilter").style.display = "block";
+  document.getElementById("sizeFilter").classList.remove("hidden");
   document.getElementById("allKnowWrapper").style.display = "none";
-  document.getElementById("filtersRow").style.display = "block";
+  document.getElementById("filtersRow").classList.remove("hidden");
 
   btnValid.classList.remove("active");
   btnExcluded.classList.remove("active");
@@ -1015,7 +1049,7 @@ document.getElementById("filtersRow").style.display = "none";
 
 document.getElementById("playersCard").style.display = "block";
 document.getElementById("allGamesList").style.display = "none";
-document.getElementById("sizeFilter").style.display = "block";
+document.getElementById("sizeFilter").classList.remove("hidden");
 document.getElementById("allKnowWrapper").style.display = "block";
 
 
@@ -1047,7 +1081,7 @@ btnAllKnow.classList.remove("active");
   document.getElementById("filtersRow").style.display = "none";
   document.getElementById("playersCard").style.display = "block";
   document.getElementById("allGamesList").style.display = "none";
-  document.getElementById("sizeFilter").style.display = "block";
+  document.getElementById("sizeFilter").classList.remove("hidden");
   document.getElementById("allKnowWrapper").style.display = "block";
 
   currentMode = "excluded";
