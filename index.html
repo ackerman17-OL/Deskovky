@@ -461,7 +461,9 @@ function showAllGames() {
   validGames.style.display = "none";
   excludedGames.style.display = "none";
   statsList.style.display = "none";
+  setTimeout(() => {
   allGamesList.style.display = "block";
+}, 10);  
 
   document.getElementById("sizeFilter").style.display = "block";
   document.getElementById("allKnowWrapper").style.display = "none";
@@ -1105,7 +1107,9 @@ document.getElementById("allKnowWrapper").style.display = "none";
   currentMode = "stats";
   validGames.style.display = "none";
   excludedGames.style.display = "none";
+  setTimeout(() => {
   statsList.style.display = "block";
+}, 10);
 
   document.getElementById("allKnowWrapper").style.display = "none";
 
