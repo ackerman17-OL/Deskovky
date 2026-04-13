@@ -51,7 +51,7 @@ body::before {
 }
 
 .card {
-  background: rgba(20,20,20,0.78);
+  background: linear-gradient(145deg, #1c1c1c, #141414);
   border-radius: 16px;
   padding: 12px;
   margin: 10px auto;
@@ -61,8 +61,7 @@ body::before {
     0 4px 10px rgba(0,0,0,0.5),
     inset 0 1px 1px rgba(255,255,255,0.05);
 
-  border: 1px solid rgba(255,255,255,0.12);
-  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255,255,255,0.25);
 }
 
 #topBar {
@@ -70,20 +69,10 @@ body::before {
   top: 0;
   z-index: 1000;
 
-  background: rgba(20,20,20,0.78);
-  backdrop-filter: blur(4px);
-
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 16px;
-
-  margin: 10px auto;
-  max-width: 600px;
+  background: rgba(18,18,18,0.92);
+  backdrop-filter: blur(8px);
 
   padding: 10px 0;
-
-  box-shadow: 
-    0 4px 10px rgba(0,0,0,0.5),
-    inset 0 1px 1px rgba(255,255,255,0.05);
 }
 
 /* nadpisy */
@@ -399,42 +388,6 @@ h2 {
   display: none !important;
 }
 
-#filtersRow select {
-  font-size: 14px;
-  padding: 6px 10px;
-  border-radius: 10px;
-
-  background: #fff;   /* bílé zpět */
-  color: #111;
-
-  border: 1px solid rgba(0,0,0,0.25);
-}
-
-.games, .game-list, #games {
-  background: rgba(20,20,20,0.78);
-  border-radius: 16px;
-  padding: 12px;
-  border: 1px solid rgba(255,255,255,0.06);
-}
-
-#validGames,
-#excludedGames,
-#statsList,
-#allGamesList {
-  background: rgba(20,20,20,0.78);
-  border-radius: 16px;
-  padding: 12px;
-  margin: 10px auto;
-  max-width: 600px;
-
-  box-shadow: 
-    0 4px 10px rgba(0,0,0,0.5),
-    inset 0 1px 1px rgba(255,255,255,0.05);
-
-  border: 1px solid rgba(255,255,255,0.12);
-  backdrop-filter: blur(4px);
-}
-
 </style>
 </head>
 <body>
@@ -476,7 +429,7 @@ h2 {
 
 </div>
 
-<div id="filtersRow" style="display:none; margin-bottom:10px; display:flex; justify-content:center; gap:20px;">
+<div id="filtersRow" style="display:none; margin-bottom:10px;">
 
   <div style="display:inline-block; margin-right:15px;">
     <label>Počet hráčů: </label>
