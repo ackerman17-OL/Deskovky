@@ -366,7 +366,7 @@ h2 {
 <div class="card">
   <h2>Deskovky</h2>
 
-  <div style="text-align:center; margin-bottom:10px;">
+  <div class="buttons">
     <button id="btnAll">Všechny hry</button>
     <button id="btnValid">Výběr hráčů</button>
     <button id="btnStats">Statistiky</button>
@@ -448,8 +448,6 @@ btnAll.addEventListener("click", showAllGames);
 
 function showAllGames() {
 
-requestAnimationFrame(() => {
-
   currentMode = "all";
 
   validGames.style.display = "none";
@@ -467,9 +465,6 @@ requestAnimationFrame(() => {
   btnAll.classList.add("active");
 
   updateAllGames();
-
-});
-
 }
 
 let currentMode = "games";
@@ -1014,8 +1009,6 @@ ${
 
 function showValid() {
 
-requestAnimationFrame(() => {
-
 document.getElementById("filtersRow").style.display = "none";
 
 document.getElementById("playersCard").style.display = "block";
@@ -1036,8 +1029,6 @@ btnExcluded.classList.remove("active");
 btnStats.classList.remove("active");
 
   update(); // 🔥 DŮLEŽITÉ
-});
-
 }
 
 function showExcluded() {
@@ -1097,8 +1088,6 @@ btnAllKnow.addEventListener("click", () => {
 
 function showStats() {
 
-requestAnimationFrame(() => {
-
 document.getElementById("filtersRow").style.display = "none";
 document.getElementById("playersCard").style.display = "none";
 document.getElementById("allGamesList").style.display = "none";
@@ -1118,9 +1107,6 @@ btnValid.classList.remove("active");
 btnExcluded.classList.remove("active");
 
   updateStats();
-
-});
-
 }
 
 update();
