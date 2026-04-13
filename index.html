@@ -364,6 +364,13 @@ h2 {
   min-height: 300px;
 }
 
+  #allKnowWrapper {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap; /* 🔥 klíč na mobil */
+}
+
 </style>
 </head>
 <body>
@@ -466,7 +473,7 @@ function showAllGames() {
 }, 10);  
 
   document.getElementById("sizeFilter").style.display = "block";
-  document.getElementById("allKnowWrapper").style.display = "none";
+ .style.display = "block"
   document.getElementById("filtersRow").style.display = "block";
 
   btnValid.classList.remove("active");
@@ -1024,7 +1031,7 @@ document.getElementById("filtersRow").style.display = "none";
 document.getElementById("playersCard").style.display = "block";
 document.getElementById("allGamesList").style.display = "none";
 document.getElementById("sizeFilter").style.display = "block";
-document.getElementById("allKnowWrapper").style.display = "block";
+.style.display = "flex"
 
 
   currentMode = "games";
@@ -1056,7 +1063,7 @@ btnAllKnow.classList.remove("active");
   document.getElementById("playersCard").style.display = "block";
   document.getElementById("allGamesList").style.display = "none";
   document.getElementById("sizeFilter").style.display = "block";
-  document.getElementById("allKnowWrapper").style.display = "block";
+  .style.display = "flex"
 
   currentMode = "excluded";
 
@@ -1102,8 +1109,7 @@ document.getElementById("filtersRow").style.display = "none";
 document.getElementById("playersCard").style.display = "none";
 document.getElementById("allGamesList").style.display = "none";
 document.getElementById("sizeFilter").style.display = "none";
-document.getElementById("allKnowWrapper").style.display = "none";
-
+.style.display = "block"
   currentMode = "stats";
   validGames.style.display = "none";
   excludedGames.style.display = "none";
@@ -1111,7 +1117,7 @@ document.getElementById("allKnowWrapper").style.display = "none";
   statsList.style.display = "block";
 }, 10);
 
-  document.getElementById("allKnowWrapper").style.display = "none";
+  .style.display = "block"
 
   btnStats.classList.add("active");
 btnAll.classList.remove("active");
