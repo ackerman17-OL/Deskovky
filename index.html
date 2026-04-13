@@ -469,21 +469,65 @@ button:active {
   right: 0;
   top: 50%;
   transform: translateY(-50%);
-  white-space: nowrap;
-  font-weight: normal;
 
-font-size: 13px;
-  font-weight: 400;
-padding: 4px 10px;
-  border-radius: 999px;
-
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-
+  font-size: 13px;
+  font-weight: 500;
   color: #fff;
 
-    backdrop-filter: blur(6px);
+  padding: 0;              /* důležité */
+  background: transparent; /* žádný box */
+  border: none;
+  box-shadow: none;
+
+  white-space: nowrap;
+}
+
+.card {
+  background: rgba(20, 20, 20, 0.82);
+}
+
+#filtersRow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}#filtersRow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+/* counter je normální prvek v layoutu */
+#gameCounter {
+  margin-left: auto; /* posune ho doprava */
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+
+  padding: 3px 8px;
+  border-radius: 999px;
+
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.10);
+  backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
+
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  #filtersRow {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  #gameCounter {
+    margin-left: 0;
+    width: 100%;
+    text-align: center;
+    margin-top: 6px;
+  }
 }
 
 </style>
