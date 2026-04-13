@@ -388,15 +388,22 @@ button:active {
 #btnStats,
 #btnAllKnow,
 #btnExcluded {
-  font-size: 13px;
-  padding: 6px 6px;
-  min-height: 38px;
+  font-weight: normal;
+  font-size: 15px;
+  padding: 6px 10px;
+  min-height: unset;
+}
 
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+#btnAll.active,
+#btnStats.active,
+#btnValid.active {
+  color: black;
+  font-weight: bold;
+}
 
-  white-space: nowrap;
+#btnAllKnow.active {
+  color: black;
+  font-weight: normal;
 }
 
 </style>
