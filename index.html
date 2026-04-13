@@ -95,17 +95,18 @@ h2 {
 ========================= */
 
 .players {
-  display: inline-grid;
+  display: grid;
   grid-template-columns: repeat(4, max-content);
   gap: 6px 14px;
-  text-align: left;
-  margin: 0 auto;
+
+  justify-content: center;
+  justify-items: start; /* lepší pro checkbox + text */
 }
 
 .players label {
   display: block;
   margin: 5px 0;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 /* mobil */
@@ -372,6 +373,39 @@ button:active {
   align-items: center;
   justify-content: center;
   text-align: center;
+}
+
+#btnAll,
+#btnValid,
+#btnStats,
+#btnAllKnow,
+#btnExcluded {
+  font-size: 14px;
+  padding: 8px 6px;
+  min-height: 42px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .players {
+    grid-template-columns: repeat(2, max-content);
+  }
+}
+
+.players label {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+@media (max-width: 600px) {
+  .players label {
+    font-size: 18px;
+  }
 }
 
 </style>
