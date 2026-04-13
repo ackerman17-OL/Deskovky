@@ -453,6 +453,39 @@ button:active {
   }
 }
 
+#filtersRow {
+  gap: 6px !important;
+}
+
+#filtersRow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+#gameCounter {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  font-weight: normal;
+
+font-size: 13px;
+  font-weight: 400;
+padding: 4px 10px;
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+
+  color: #fff;
+
+    backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
 </style>
 </head>
 <body>
@@ -492,7 +525,7 @@ button:active {
 
 </div>
 
-<div id="filtersRow" style="display:none; margin-bottom:10px; display:flex; justify-content:center; gap:20px;">
+<div id="filtersRow" style="display:none; margin-bottom:10px; display:flex; justify-content:center;">
 
   <div style="display:inline-block; margin-right:15px;">
     <label>Počet hráčů: </label>
@@ -521,6 +554,10 @@ button:active {
       <option value="T">Tacit</option>
     </select>
   </div>
+
+<div id="gameCounter" class="game-counter">
+  0 her
+</div>
 
 </div>
 
@@ -557,7 +594,7 @@ function showAllGames() {
   statsList.style.display = "none";
   allGamesList.style.display = "block";
   document.getElementById("sizeFilter").style.display = "block";
-
+  document.getElementById("gameCounter").style.display = "block";
   document.getElementById("sizeFilter").classList.remove("hidden");
   document.getElementById("allKnowWrapper").style.display = "none";
   document.getElementById("filtersRow").style.display = "flex";
@@ -758,6 +795,8 @@ const games = [
 {name:"Zoo Vadis", players:[4,5,6,7], size:"medium", owners:["I"], knows:["I"]},
 
 ];
+
+const totalGames = games.length;
 
 function update() {
 
@@ -1108,12 +1147,20 @@ ${
     list.appendChild(li);
 
   });
+
+const counter = document.getElementById("gameCounter");
+
+if (counter) {
+  const list = document.getElementById("allGamesList");
+  counter.textContent = `${list.children.length} / ${totalGames}`;
+}
+
 }
 
 function showValid() {
 
 document.getElementById("filtersRow").style.display = "none";
-
+document.getElementById("gameCounter").style.display = "none";
 document.getElementById("playersCard").style.display = "block";
 document.getElementById("allGamesList").style.display = "none";
 document.getElementById("sizeFilter").classList.remove("hidden");
@@ -1145,7 +1192,7 @@ btnAllKnow.classList.remove("active");
     showValid();
     return;
   }
-
+  document.getElementById("gameCounter").style.display = "none";
   document.getElementById("filtersRow").style.display = "none";
   document.getElementById("playersCard").style.display = "block";
   document.getElementById("allGamesList").style.display = "none";
@@ -1192,6 +1239,7 @@ btnAllKnow.addEventListener("click", () => {
 
 function showStats() {
 
+document.getElementById("gameCounter").style.display = "none";
 document.getElementById("filtersRow").style.display = "none";
 document.getElementById("playersCard").style.display = "none";
 document.getElementById("allGamesList").style.display = "none";
