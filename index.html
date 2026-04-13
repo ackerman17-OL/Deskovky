@@ -417,6 +417,24 @@ button:active {
   font-weight: normal;
 }
 
+   @media (max-width: 600px) {
+
+  button {
+    border: 1px solid rgba(255,255,255,0.35);
+    background: rgba(40, 40, 40, 0.95);
+    opacity: 0.95;
+  }
+
+  button:not(.active) {
+    border: 1px solid rgba(255,255,255,0.25);
+  }
+
+  button.active {
+    border: 1px solid rgba(255,255,255,0.7);
+    box-shadow: 0 0 10px rgba(255,255,255,0.15);
+  }
+}
+
 </style>
 </head>
 <body>
