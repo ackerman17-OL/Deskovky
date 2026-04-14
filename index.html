@@ -542,6 +542,20 @@ button:active {
   }
 }
 
+   @media (max-width: 600px) {
+  body::before {
+    background: radial-gradient(
+      circle at center,
+      rgba(0,0,0,0.10),
+      rgba(0,0,0,0.35)
+    );
+  }
+
+  .card {
+    background: rgba(30, 30, 30, 0.75);
+  }
+}
+
 </style>
 </head>
 <body>
