@@ -588,10 +588,47 @@ button:active {
   </div>
 <div class="card" id="filtersCard">
 
-<div id="sizeFilter" style="margin-bottom:10px;">
-  <label><input type="checkbox" value="big" checked> Velké</label>
-  <label><input type="checkbox" value="medium"> Střední</label>
-  <label><input type="checkbox" value="small"> Malé</label>
+<div style="margin:4px 0 2px; text-align:center; font-size:14px; font-weight:600; opacity:0.6;">
+  Herní doba:
+</div>
+
+<div id="sizeFilter" style="margin-bottom:4px; display:flex; gap:10px; justify-content:center; align-items:flex-start;">
+
+  <label style="display:inline-flex; flex-direction:column; align-items:center; line-height:1.05; gap:2px;">
+    <span style="display:flex; align-items:center; gap:4px;">
+      <input type="checkbox" value="epic" checked> Extra
+    </span>
+    <span style="font-style:italic; font-size:11px; opacity:0.55;">
+      180+
+    </span>
+  </label>
+
+  <label style="display:inline-flex; flex-direction:column; align-items:center; line-height:1.05; gap:2px;">
+    <span style="display:flex; align-items:center; gap:4px;">
+      <input type="checkbox" value="big" checked> Dlouhé
+    </span>
+    <span style="font-style:italic; font-size:11px; opacity:0.55;">
+      90–180
+    </span>
+  </label>
+
+  <label style="display:inline-flex; flex-direction:column; align-items:center; line-height:1.05; gap:2px;">
+    <span style="display:flex; align-items:center; gap:4px;">
+      <input type="checkbox" value="medium" checked> Střední
+    </span>
+    <span style="font-style:italic; font-size:11px; opacity:0.55;">
+      45–90
+    </span>
+  </label>
+
+  <label style="display:inline-flex; flex-direction:column; align-items:center; line-height:1.05; gap:2px;">
+    <span style="display:flex; align-items:center; gap:4px;">
+      <input type="checkbox" value="small" checked> Krátké
+    </span>
+    <span style="font-style:italic; font-size:11px; opacity:0.55;">
+      ≤ 45
+    </span>
+  </label>
 
 </div>
 
