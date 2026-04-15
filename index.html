@@ -586,51 +586,65 @@ button:active {
 </div>
 
   </div>
+
 <div class="card" id="filtersCard">
 
-<div style="margin:4px 0 2px; text-align:center; font-size:14px; font-weight:700; color:rgba(255,255,255,0.95); letter-spacing:0.5px;">
-  ⏱ Herní doba
+<div id="sizeFilter" style="margin:0 0 4px; display:flex; flex-direction:column; gap:6px; align-items:center;">
+
+  <!-- NADPIS JE TEĎ UVNITŘ -->
+  <div style="
+  text-align:center;
+  font-size:16px;
+  font-weight:700;
+  margin-bottom:6px;
+  color:rgba(255,255,255,0.95);
+  letter-spacing:0.6px;
+">
+  🕒 Herní doba
 </div>
 
-<div id="sizeFilter" style="margin:0 0 4px; display:flex; gap:10px; justify-content:center; align-items:flex-start;">
+  <!-- FILTRY -->
+  <div style="display:flex; gap:10px; justify-content:center; align-items:flex-start; flex-wrap:wrap;">
 
-  <label style="display:inline-flex; flex-direction:column; align-items:center; line-height:1.05; gap:1px;">
-    <span style="display:flex; align-items:center; gap:4px; font-size:14px; color:#fff;">
-      <input type="checkbox" value="epic"> Extra
-    </span>
-    <span style="font-style:italic; font-size:11px; color:rgba(255,255,255,0.65); margin-left:6px;">
-      180+
-    </span>
-  </label>
+    <label style="display:inline-flex; flex-direction:column; align-items:center; line-height:1.05; gap:1px;">
+  <span style="display:flex; align-items:center; gap:4px; font-size:14px; color:#fff;">
+    <input type="checkbox" value="epic"> Extra
+  </span>
+  <span style="font-style:italic; font-size:11px; color:rgba(255,255,255,0.65); margin-left:26px;">
+    (180+)
+  </span>
+</label>
 
-  <label style="display:inline-flex; flex-direction:column; align-items:center; line-height:1.05; gap:1px;">
-    <span style="display:flex; align-items:center; gap:4px; font-size:14px; color:#fff;">
-      <input type="checkbox" value="big"> Dlouhé
-    </span>
-    <span style="font-style:italic; font-size:11px; color:rgba(255,255,255,0.65); margin-left:6px;">
-      90–180
-    </span>
-  </label>
+<label style="display:inline-flex; flex-direction:column; align-items:center; line-height:1.05; gap:1px;">
+  <span style="display:flex; align-items:center; gap:4px; font-size:14px; color:#fff;">
+    <input type="checkbox" value="big"> Dlouhé
+  </span>
+  <span style="font-style:italic; font-size:11px; color:rgba(255,255,255,0.65); margin-left:26px;">
+    (45-90)
+  </span>
+</label>
 
-  <label style="display:inline-flex; flex-direction:column; align-items:center; line-height:1.05; gap:1px;">
-    <span style="display:flex; align-items:center; gap:4px; font-size:14px; color:#fff;">
-      <input type="checkbox" value="medium"> Střední
-    </span>
-    <span style="font-style:italic; font-size:11px; color:rgba(255,255,255,0.65); margin-left:6px;">
-      45–90
-    </span>
-  </label>
+<label style="display:inline-flex; flex-direction:column; align-items:center; line-height:1.05; gap:1px;">
+  <span style="display:flex; align-items:center; gap:4px; font-size:14px; color:#fff;">
+    <input type="checkbox" value="medium"> Střední
+  </span>
+  <span style="font-style:italic; font-size:11px; color:rgba(255,255,255,0.65); margin-left:26px;">
+    (45–90)
+  </span>
+</label>
 
-  <label style="display:inline-flex; flex-direction:column; align-items:center; line-height:1.05; gap:1px;">
-    <span style="display:flex; align-items:center; gap:4px; font-size:14px; color:#fff;">
-      <input type="checkbox" value="small"> Krátké
-    </span>
-    <span style="font-style:italic; font-size:11px; color:rgba(255,255,255,0.65); margin-left:6px;">
-      ≤ 45
-    </span>
-  </label>
+<label style="display:inline-flex; flex-direction:column; align-items:center; line-height:1.05; gap:1px;">
+  <span style="display:flex; align-items:center; gap:4px; font-size:14px; color:#fff;">
+    <input type="checkbox" value="small"> Krátké
+  </span>
+  <span style="font-style:italic; font-size:11px; color:rgba(255,255,255,0.65); margin-left:26px;">
+    (≤ 45)
+  </span>
+</label>
 
+  </div>
 </div>
+
 <div id="filtersRow" style="display:none; margin-bottom:10px; display:flex; justify-content:center;">
 
   <div style="display:inline-block; margin-right:15px;">
@@ -741,7 +755,7 @@ const games = [
 /* HRY */
 {name:"7 Divů světa", players:[3,4,5,6,7],  size:"small", owners:["I"], knows:["I","K","O","R","T"]},
 {name:"7 Divů světa: Duel", players:[2], size:"small", owners:["O"], knows:["O","I","K"]},
-{name:"1989: Úsvit svobody", players:[2], size:"epic", owners:["O"], knows: ["K","O"]},
+{name:"1989: Úsvit svobody", players:[2], size:"big", owners:["O"], knows: ["K","O"]},
 {name:"Age of Innovation", players:[3,4,5], size:"big", owners:["I"], knows: []},
 {name:"Alchymisté", players:[2,3,4],  size:"big", owners:["T"], knows:["M","T"]},
 {name:"Andromeda: Na hranici galaxie", players:[2,3,4], size:"big", owners:["I"], knows: []},
@@ -789,7 +803,7 @@ const games = [
 {name:"Great Western Trail", players:[2,3,4], size:"big", owners:["O","T","I"], knows:["B","I","K","M","O","R","T"]},
 {name:"Great Western Trail: New Zealand", players:[2,3,4], size:"big", owners:["I"], knows: []},
 {name:"Great Zimbabwe", players:[3,4,5], size:"big", owners:["I"], knows: []},
-{name:"Hannibal & Hamilcar", players:[2], size:"big", owners:["R"], knows:["O","R"]},
+{name:"Hannibal & Hamilcar", players:[2], size:"epic", owners:["R"], knows:["O","R"]},
 {name:"Heat", players:[4,5,6], size:"medium", owners:["I"], knows:["I","K","M","O","R","T"]},
 {name:"Hegemonie", players:[4], size:"epic", owners:["I"], knows: []},
 {name:"High Frontier 4 All", players:[1,2,3,4], size:"epic", owners:["I"], knows: []},
@@ -890,7 +904,7 @@ const games = [
 {name:"Válka v říši divů", players:[3,4,5], size:"medium", owners:["I"], knows:[]},
 {name:"Vampire: The Masquerade - Vendeta", players:[3,4,5], size:"medium", owners:["I"], knows:["I","K","O","R"]},
 {name:"Ve jménu krále", players:[1], size:"small", owners:["O"], knows:["O"]},
-{name:"Voidfall", players:[1,2,3], size:"big", owners:["O"], knows:["O","R","T"]},
+{name:"Voidfall", players:[1,2,3], size:"epic", owners:["O"], knows:["O","R","T"]},
 {name:"Vysoké napětí", players:[3,4,5,6], size:"big", owners:["I"], knows:[]},
 {name:"Worms: Desková hra", players:[3,4], size:"medium", owners:["I"], knows:[]},
 {name:"XCOM", players:[4], size:"big", owners:["T"], knows:["I","K","M","O","R","T"]},
